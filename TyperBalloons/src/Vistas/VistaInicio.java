@@ -45,10 +45,51 @@ public class VistaInicio{
         ImageView salir2 = new ImageView(new Image(CONSTANTES.RUTA_IMGS+"Salir_ButtonPressed01.png"));
         Pane inicio = new Pane();
         inicio.getChildren().add(inicio1);
+        
+        inicio.setOnMouseClicked((e)->{
+            inicio.getChildren().clear();
+            inicio.getChildren().add(inicio1);
+        });
+        inicio.setOnMousePressed((e)->{
+            
+            inicio.getChildren().add(new ImageView(new Image(CONSTANTES.RUTA_IMGS+"IniciarJuego_ButtonPressed01.png")));
+        });
+        inicio.setOnMouseReleased((e)->{
+            
+            inicio.getChildren().add(new ImageView(new Image(CONSTANTES.RUTA_IMGS+"IniciarJuego_Button01.png")));
+        });
+        
+        
         Pane punt = new Pane();
         punt.getChildren().add(punt1);
+        punt.setOnMouseClicked((e)->{
+            punt.getChildren().clear();
+            punt.getChildren().add(punt1);
+        });
+        punt.setOnMousePressed((e)->{
+            punt.getChildren().add(new ImageView(new Image(CONSTANTES.RUTA_IMGS+"VerPuntajes_ButtonPressed01.png")));
+        });
+        punt.setOnMouseReleased((e)->{
+            punt.getChildren().add(new ImageView(new Image(CONSTANTES.RUTA_IMGS+"VerPuntajes_Button01.png")));
+        });
+        
         Pane salir = new Pane();
         salir.getChildren().add(salir1);
+        salir.setOnMouseClicked((e)->{
+            salir.getChildren().clear();
+            salir.getChildren().add(salir1);
+        });
+        salir.setOnMousePressed((e)->{
+            salir.getChildren().add(new ImageView(new Image(CONSTANTES.RUTA_IMGS+"Salir_ButtonPressed01.png")));
+        });
+        salir.setOnMouseReleased((e)->{
+            salir.getChildren().add(new ImageView(new Image(CONSTANTES.RUTA_IMGS+"Salir_Button01.png")));
+        });
+        
+        
+        
+        
+        
         buttons.setSpacing(20);
         buttons.getChildren().addAll(inicio,punt,salir);
         return buttons;
@@ -69,15 +110,35 @@ public class VistaInicio{
         sn.setLayoutY(370);
         sn.setSpacing(10);
         ImageView fb = new ImageView(new Image(CONSTANTES.RUTA_IMGS+"FB_img.png"));
-        fb.setFitHeight(70);
-        fb.setFitWidth(70);
+        
         ImageView twitter = new ImageView(new Image(CONSTANTES.RUTA_IMGS+"Twitter_img.png"));
-        twitter.setFitHeight(70);
-        twitter.setFitWidth(70);
+        
         Pane pFB = new Pane();
         pFB.getChildren().add(fb);
+        
+        pFB.setOnMouseClicked((e)->{
+            pFB.getChildren().clear();
+            pFB.getChildren().add(fb);
+        });
+        pFB.setOnMousePressed((e)->{
+            pFB.getChildren().add(new ImageView(new Image(CONSTANTES.RUTA_IMGS+"FB_imgPressed.png")));
+        });
+        pFB.setOnMouseReleased((e)->{
+            pFB.getChildren().add(new ImageView(new Image(CONSTANTES.RUTA_IMGS+"FB_img.png")));
+        });
+        
         Pane pTwitter = new Pane();
         pTwitter.getChildren().add(twitter);
+        pTwitter.setOnMouseClicked((e)->{
+            pTwitter.getChildren().clear();
+            pTwitter.getChildren().add(twitter);
+        });
+        pTwitter.setOnMousePressed((e)->{
+            pTwitter.getChildren().add(new ImageView(new Image(CONSTANTES.RUTA_IMGS+"Twitter_imgPressed.png")));
+        });
+        pTwitter.setOnMouseReleased((e)->{
+            pTwitter.getChildren().add(new ImageView(new Image(CONSTANTES.RUTA_IMGS+"Twitter_img.png")));
+        });
         sn.getChildren().addAll(pFB,pTwitter);
         return sn;
     }
@@ -85,10 +146,25 @@ public class VistaInicio{
     private Pane includeSettings(){
         Pane eng = new Pane();
         ImageView engView = new ImageView(new Image(CONSTANTES.RUTA_IMGS+"Engranaje_img.png"));
-        
         eng.getChildren().add(engView);
         eng.setLayoutX(80);
         eng.setLayoutY(400);
+        eng.setOnMouseClicked((e)->{
+            eng.getChildren().clear();
+            eng.getChildren().add(engView);         
+            
+            
+        });
+        eng.setOnMousePressed((e)->{
+            
+            eng.getChildren().add(new ImageView(new Image(CONSTANTES.RUTA_IMGS+"Engranaje_imgPressed.png")));
+            
+        });
+        eng.setOnMouseReleased((e)->{
+            
+            eng.getChildren().add(new ImageView(new Image(CONSTANTES.RUTA_IMGS+"Engranaje_img.png")));
+            
+        });
         return eng;
     }
 }
