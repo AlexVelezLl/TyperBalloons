@@ -5,11 +5,14 @@
  */
 package typerballoons;
 
+import Vistas.VistaInicio;
+import data.CONSTANTES;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 
@@ -21,24 +24,19 @@ public class TyperBalloons extends Application {
     
     @Override
     public void start(Stage primaryStage) {
-        Button btn = new Button();
-        btn.setText("Say 'Hello World'");
-        btn.setOnAction(new EventHandler<ActionEvent>() {
-            
-            @Override
-            public void handle(ActionEvent event) {
-                System.out.println("Hello World!");
-            }
-        });
         
-        StackPane root = new StackPane();
-        root.getChildren().add(btn);
+        VistaInicio index = new VistaInicio();
         
-        Scene scene = new Scene(root, 300, 250);
+        Pane backGround = index.getRoot();
         
-        primaryStage.setTitle("Hello World!");
-        primaryStage.setScene(scene);
+        Scene sc = new Scene(backGround);
+        primaryStage.setTitle("TyperBalloons");
+        primaryStage.setHeight(CONSTANTES.HEIGHT);
+        primaryStage.setWidth(CONSTANTES.WIDTH);
+        primaryStage.setResizable(false);
+        primaryStage.setScene(sc);
         primaryStage.show();
+        
     }
 
     /**
