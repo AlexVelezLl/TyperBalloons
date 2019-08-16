@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package typerballoons;
+package Vistas;
 
 import Vistas.VistaInicio;
 import data.CONSTANTES;
@@ -36,7 +36,6 @@ public class TyperBalloons extends Application {
         primaryStage.setResizable(false);
         primaryStage.setScene(sc);
         primaryStage.show();
-        
     }
 
     /**
