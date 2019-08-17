@@ -229,8 +229,7 @@ public class VistaInicio{
         return eng;
     }
     private Pane createOptions(){
-        
-        Font theFont = Font.font("Arial", FontWeight.BOLD, 45 );
+
         Pane inicioJuego = new  Pane();
         ImageView ini = new ImageView(new Image(CONSTANTES.RUTA_IMGS+"BG_IJ02.png"));
         Pane pSalir = new Pane();
@@ -259,9 +258,8 @@ public class VistaInicio{
         dificultad.setLayoutX(200);
         dificultad.setLayoutY(40);
         lDificultad.setTextFill(Color.WHITE);
-        lDificultad.setFont(theFont);
-        
-        
+        lDificultad.setFont(CONSTANTES.FUENTE);
+   
         ImageView facil = new ImageView(new Image(CONSTANTES.RUTA_IMGS+"Facil_Button.png"));
         ImageView medio = new ImageView(new Image(CONSTANTES.RUTA_IMGS+"Medio_Button.png"));
         ImageView dificil = new ImageView(new Image(CONSTANTES.RUTA_IMGS+"Dificil_Button.png"));

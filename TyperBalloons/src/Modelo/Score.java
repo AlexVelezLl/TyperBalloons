@@ -9,6 +9,19 @@ package Modelo;
  *
  * @author CORE i7 ULTIMATE
  */
-public class Score {
-    
+public class Score{
+    public final String nombre;
+    public final int puntaje;
+    public Score(String nombre, int puntaje){
+        this.nombre = nombre;
+        this.puntaje = puntaje;
+    }
+    public String getNombre() {
+        return nombre;
+    }
+
+    public int getPuntaje() {
+        return puntaje;
+    }
+
 }
