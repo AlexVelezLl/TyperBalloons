@@ -9,6 +9,6 @@ package Modelo;
  *
  * @author PC
  */
-public class Juego {
+public class Juego{
     
 }

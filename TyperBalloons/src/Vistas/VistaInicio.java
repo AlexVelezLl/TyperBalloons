@@ -6,6 +6,7 @@
 package Vistas;
 
 
+import Modelo.Dificultad;
 import data.CONSTANTES;
 import java.io.IOException;
 import java.util.logging.Level;
@@ -229,7 +230,7 @@ public class VistaInicio{
     }
     private Pane createOptions(){
         
-        Font theFont = Font.font("Comic Sans", FontWeight.BOLD, 45 );
+        Font theFont = Font.font("Arial", FontWeight.BOLD, 45 );
         Pane inicioJuego = new  Pane();
         ImageView ini = new ImageView(new Image(CONSTANTES.RUTA_IMGS+"BG_IJ02.png"));
         Pane pSalir = new Pane();
@@ -267,8 +268,7 @@ public class VistaInicio{
         dificultad.getChildren().addAll(lDificultad,facil,medio,dificil);
         dificultad.setAlignment(Pos.CENTER);
         dificultad.setSpacing(10);
-        inicioJuego.getChildren().add(dificultad);
-        
+        inicioJuego.getChildren().add(dificultad);  
         return inicioJuego;
     }
 }
