@@ -12,6 +12,7 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.image.Image;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
@@ -35,6 +36,7 @@ public class TyperBalloons extends Application {
         primaryStage.setWidth(CONSTANTES.WIDTH);
         primaryStage.setResizable(false);
         primaryStage.setScene(sc);
+        primaryStage.getIcons().add(new Image(CONSTANTES.RUTA_IMGS+"ICO_01.png")); 
         primaryStage.show();
     }
 

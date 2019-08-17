@@ -107,6 +107,26 @@ public class VistaInicio{
         punt.setOnMouseClicked((e)->{
             punt.getChildren().clear();
             punt.getChildren().add(punt1);
+            ImageView transicion = new ImageView(new Image(CONSTANTES.RUTA_IMGS+"Transicion.png"));
+            transicion.setLayoutY(600);
+            root.getChildren().add(transicion);
+            Runnable transition = new Runnable(){
+                @Override
+                public void run() {
+                    for (int i=0;i<2080;i++){
+                        Platform.runLater(()->{
+                            transicion.setLayoutY(transicion.getLayoutY()-1);
+                        });
+                        try {
+                            Thread.sleep(1);
+                        } catch (InterruptedException ex) {
+                            Logger.getLogger(VistaInicio.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+                    }
+                }
+            };
+            Thread tr = new Thread(transition);
+            tr.start();
         });
         punt.setOnMousePressed((e)->{
             punt.getChildren().add(new ImageView(new Image(CONSTANTES.RUTA_IMGS+"VerPuntajes_ButtonPressed01.png")));
