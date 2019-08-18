@@ -7,27 +7,21 @@ package Vistas;
 
 
 import Modelo.Dificultad;
-import data.CONSTANTES;
+import utilities.*;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.application.Platform;
-import javafx.event.EventHandler;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyEvent;
-import javafx.scene.layout.Background;
-import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
-import javafx.scene.text.Font;
-import javafx.scene.text.FontWeight;
-import javafx.stage.Stage;
+import java.applet.AudioClip;
 
 /**
  *
@@ -37,12 +31,13 @@ public class VistaInicio{
     Pane root;
     Pane onRoot;
     public VistaInicio()throws IllegalArgumentException{
+        
         root = new Pane();
         onRoot = new Pane();
-        Image bG = new Image(CONSTANTES.RUTA_IMGS+"BG-01.jpg");
+        Image bG = new Image(CONSTANTES.RUTA_IMGS+"BG_01.png");
+       
         ImageView bGView = new ImageView(bG);
-        bGView.setFitHeight(CONSTANTES.HEIGHT);
-        bGView.setFitWidth(CONSTANTES.WIDTH);
+        //bGView.setLayoutY(5);
         root.getChildren().addAll(bGView,includeTitle(),includeButtons(),includeSN(),includeSettings(),onRoot);
     }
     
@@ -66,8 +61,9 @@ public class VistaInicio{
             Pane inicioJuego = createOptions();
            
             
-            
-            onRoot.getChildren().addAll(new ImageView(new Image(CONSTANTES.RUTA_IMGS+"BG-Block.png")),inicioJuego);
+            ImageView block = new ImageView(new Image(CONSTANTES.RUTA_IMGS+"BG_Block.png"));
+            block.setOpacity(0.3);
+            onRoot.getChildren().addAll(block,inicioJuego);
             onRoot.setOnKeyPressed((e1)->{
                 if(e1.getCode()==KeyCode.ESCAPE)
                 onRoot.getChildren().clear();
@@ -85,56 +81,21 @@ public class VistaInicio{
                             Logger.getLogger(VistaInicio.class.getName()).log(Level.SEVERE, null, ex);
                         }
                     }
-                }
-                
-                
+                } 
             };
             Thread bajarCartel = new Thread(bajar);
             bajarCartel.start();
-            
         });
-        inicio.setOnMousePressed((e)->{
-            
-            inicio.getChildren().add(new ImageView(new Image(CONSTANTES.RUTA_IMGS+"IniciarJuego_ButtonPressed01.png")));
-        });
-        inicio.setOnMouseReleased((e)->{
-            
-            inicio.getChildren().add(new ImageView(new Image(CONSTANTES.RUTA_IMGS+"IniciarJuego_Button01.png")));
-        });
-        
+        Utilities.botonSostenido(inicio, "IniciarJuego_Button01.png", "IniciarJuego_ButtonPressed01.png");    
         
         Pane punt = new Pane();
         punt.getChildren().add(punt1);
         punt.setOnMouseClicked((e)->{
             punt.getChildren().clear();
             punt.getChildren().add(punt1);
-            ImageView transicion = new ImageView(new Image(CONSTANTES.RUTA_IMGS+"Transicion.png"));
-            transicion.setLayoutY(600);
-            root.getChildren().add(transicion);
-            Runnable transition = new Runnable(){
-                @Override
-                public void run() {
-                    for (int i=0;i<2080;i++){
-                        Platform.runLater(()->{
-                            transicion.setLayoutY(transicion.getLayoutY()-1);
-                        });
-                        try {
-                            Thread.sleep(1);
-                        } catch (InterruptedException ex) {
-                            Logger.getLogger(VistaInicio.class.getName()).log(Level.SEVERE, null, ex);
-                        }
-                    }
-                }
-            };
-            Thread tr = new Thread(transition);
-            tr.start();
+            
         });
-        punt.setOnMousePressed((e)->{
-            punt.getChildren().add(new ImageView(new Image(CONSTANTES.RUTA_IMGS+"VerPuntajes_ButtonPressed01.png")));
-        });
-        punt.setOnMouseReleased((e)->{
-            punt.getChildren().add(new ImageView(new Image(CONSTANTES.RUTA_IMGS+"VerPuntajes_Button01.png")));
-        });
+        Utilities.botonSostenido(punt, "VerPuntajes_Button01.png", "VerPuntajes_ButtonPressed01.png");
         
         Pane salir = new Pane();
         salir.getChildren().add(salir1);
@@ -142,14 +103,8 @@ public class VistaInicio{
             
             System.exit(0);
         });
-        salir.setOnMousePressed((e)->{
-            salir.getChildren().add(new ImageView(new Image(CONSTANTES.RUTA_IMGS+"Salir_ButtonPressed01.png")));
-        });
-        salir.setOnMouseReleased((e)->{
-            salir.getChildren().add(new ImageView(new Image(CONSTANTES.RUTA_IMGS+"Salir_Button01.png")));
-        });
-        
-           
+        Utilities.botonSostenido(salir, "Salir_Button01.png", "Salir_ButtonPressed01.png");
+                  
         buttons.setSpacing(20);
         buttons.getChildren().addAll(inicio,punt,salir);
         return buttons;
@@ -157,7 +112,7 @@ public class VistaInicio{
     
     private Pane includeTitle(){
         Pane pTitle = new Pane();
-        ImageView title = new ImageView(new Image(CONSTANTES.RUTA_IMGS+"TyperBallons_Title03.png"));
+        ImageView title = new ImageView(new Image(CONSTANTES.RUTA_IMGS+"TyperBallons_Title04.png"));
         
         title.setLayoutX(70);
         title.setLayoutY(45);
@@ -181,12 +136,7 @@ public class VistaInicio{
             pFB.getChildren().clear();
             pFB.getChildren().add(fb);
         });
-        pFB.setOnMousePressed((e)->{
-            pFB.getChildren().add(new ImageView(new Image(CONSTANTES.RUTA_IMGS+"FB_imgPressed.png")));
-        });
-        pFB.setOnMouseReleased((e)->{
-            pFB.getChildren().add(new ImageView(new Image(CONSTANTES.RUTA_IMGS+"FB_img.png")));
-        });
+        Utilities.botonSostenido(pFB, "FB_img.png", "FB_imgPressed.png");
         
         Pane pTwitter = new Pane();
         pTwitter.getChildren().add(twitter);
@@ -194,12 +144,7 @@ public class VistaInicio{
             pTwitter.getChildren().clear();
             pTwitter.getChildren().add(twitter);
         });
-        pTwitter.setOnMousePressed((e)->{
-            pTwitter.getChildren().add(new ImageView(new Image(CONSTANTES.RUTA_IMGS+"Twitter_imgPressed.png")));
-        });
-        pTwitter.setOnMouseReleased((e)->{
-            pTwitter.getChildren().add(new ImageView(new Image(CONSTANTES.RUTA_IMGS+"Twitter_img.png")));
-        });
+        Utilities.botonSostenido(pTwitter, "Twitter_img.png", "Twitter_imgPressed.png");
         sn.getChildren().addAll(pFB,pTwitter);
         return sn;
     }
@@ -212,10 +157,31 @@ public class VistaInicio{
         eng.setLayoutY(400);
         eng.setOnMouseClicked((e)->{
             eng.getChildren().clear();
-            eng.getChildren().add(engView);         
+            eng.getChildren().add(engView);
+            Pane setingsPane = new Pane();
+            ImageView retro = new ImageView(new Image(CONSTANTES.RUTA_IMGS+"Retro_Button.png"));
+            Pane pRetro = new Pane();
+            Button b = new Button();
+            b.setLayoutX(-20);
+            pRetro.getChildren().addAll(b,retro);
+            pRetro.setOnMouseClicked((a)->{
+                pRetro.getChildren().clear();
+                pRetro.getChildren().add(retro);
+                Utilities.transition2(setingsPane, root);
+                
+            });
+            pRetro.setOnKeyPressed((a)->{
+                if(a.getCode()==KeyCode.ESCAPE){
+                    Utilities.transition2(setingsPane, root);
+                }
+            });
+            Utilities.botonSostenido(pRetro, "Retro_Button.png", "Retro_ButtonPressed.png");
             
+            setingsPane.getChildren().addAll(new ImageView(new Image(CONSTANTES.RUTA_IMGS+"BG_STGNS01.png")),pRetro);
+            Utilities.transition2(root,setingsPane);
             
         });
+        Utilities.botonSostenido(eng, "Engranaje_img.png", "Engranaje_imgPressed.png");
         eng.setOnMousePressed((e)->{
             
             eng.getChildren().add(new ImageView(new Image(CONSTANTES.RUTA_IMGS+"Engranaje_imgPressed.png")));
@@ -241,12 +207,7 @@ public class VistaInicio{
             onRoot.getChildren().clear();
             pSalir.getChildren().clear();
         });
-        pSalir.setOnMousePressed((e)->{
-            pSalir.getChildren().add(new ImageView(new Image(CONSTANTES.RUTA_IMGS+"X_ButtonPressed.png")));
-        });
-        pSalir.setOnMouseReleased((e)->{
-            pSalir.getChildren().add(new ImageView(new Image(CONSTANTES.RUTA_IMGS+"X_Button.png")));
-        });
+        Utilities.botonSostenido(pSalir,"X_Button.png","X_ButtonPressed.png");
         Button b = new Button();
         b.setLayoutY(100);
         inicioJuego.getChildren().addAll(b,ini,pSalir);
@@ -261,12 +222,38 @@ public class VistaInicio{
         lDificultad.setFont(CONSTANTES.FUENTE);
    
         ImageView facil = new ImageView(new Image(CONSTANTES.RUTA_IMGS+"Facil_Button.png"));
-        ImageView medio = new ImageView(new Image(CONSTANTES.RUTA_IMGS+"Medio_Button.png"));
-        ImageView dificil = new ImageView(new Image(CONSTANTES.RUTA_IMGS+"Dificil_Button.png"));
-        dificultad.getChildren().addAll(lDificultad,facil,medio,dificil);
+        Pane pFacil = new Pane();
+        pFacil.getChildren().add(facil);
+        Utilities.botonSostenido(pFacil, "Facil_Button.png", "Facil_ButtonPressed.png");
+        pFacil.setOnMouseClicked((e)->{
+            pFacil.getChildren().clear();
+            pFacil.getChildren().add(facil);
+            Utilities.transition(root);
+        });
+        ImageView medio = new ImageView(new Image(CONSTANTES.RUTA_IMGS+"Medio_Button01.png"));
+        
+        Pane pMedio = new Pane();
+        pMedio.getChildren().add(medio);
+        Utilities.botonSostenido(pMedio, "Medio_Button01.png", "Medio_ButtonPressed01.png");
+        pMedio.setOnMouseClicked((e)->{
+            pMedio.getChildren().clear();
+            pMedio.getChildren().add(medio);
+            Utilities.transition(root);
+        });
+        ImageView dificil = new ImageView(new Image(CONSTANTES.RUTA_IMGS+"Dificil_Button01.png"));
+        Pane pDificil = new Pane();
+        pDificil.getChildren().add(dificil);
+        Utilities.botonSostenido(pDificil, "Dificil_Button01.png", "Dificil_ButtonPressed01.png");
+        pDificil.setOnMouseClicked((e)->{
+            pDificil.getChildren().clear();
+            pDificil.getChildren().add(dificil);
+            Utilities.transition(root);
+        });
+        dificultad.getChildren().addAll(lDificultad,pFacil,pMedio,pDificil);
         dificultad.setAlignment(Pos.CENTER);
         dificultad.setSpacing(10);
         inicioJuego.getChildren().add(dificultad);  
         return inicioJuego;
     }
+    
 }
