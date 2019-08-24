@@ -21,7 +21,7 @@ public class testVistajuego1 extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception {
-        Juego = new VistaJuego1();
+        Juego = new VistaJuego1();  
         Pane root = Juego.getRoot();
         Scene sc = new Scene(root);
         primaryStage.setHeight(CONSTANTES.HEIGHT);

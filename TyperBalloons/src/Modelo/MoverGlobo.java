@@ -5,6 +5,7 @@
  */
 package Modelo;
 
+import Vistas.VistaJuego1;
 import javafx.application.Platform;
 
 /**
@@ -13,13 +14,14 @@ import javafx.application.Platform;
  */
 public class MoverGlobo implements Runnable {
     Globo globo;
+
     public MoverGlobo(Globo globo){
         this.globo=globo;
     }
 
     @Override
     public void run() {
-        for (int i=0;i<3000;i++){
+        for (int i=0;i<850;i++){
         Platform.runLater(()->{
             globo.setLayoutY(globo.getPosicionY()-1);
             });
@@ -29,5 +31,6 @@ public class MoverGlobo implements Runnable {
                     System.out.println("Ocurrio un error");
                 }
         }
+        VistaJuego1.globos.remove(globo);
     }
 }

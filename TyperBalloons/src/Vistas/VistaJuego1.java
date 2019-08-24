@@ -10,6 +10,10 @@ import Modelo.GloboAmarillo;
 import Modelo.GloboRojo;
 import Modelo.GloboVerde;
 import Modelo.MoverGlobo;
+import controlador.Controlador;
+import java.io.File;
+import java.util.ArrayList;
+import java.util.Iterator;
 import utilities.CONSTANTES;
 import javafx.geometry.Point2D;
 import javafx.scene.layout.Pane;
@@ -25,6 +29,8 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.HBox;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 
@@ -41,24 +47,33 @@ public class VistaJuego1 {
     int numeroGlobos;
     private Random random=new Random();
     ImageView i;
-    
+    public static ArrayList <Globo> globos;
     
     public VistaJuego1(){
+        globos = new ArrayList<>();
         tiempoJuego=60;
         root = CrearElementos();
         iniciarJuego("facil");
         Thread tiempo= new Thread(new HiloTiempo());
         tiempo.start();
-    
+        
     }
     
     public Pane CrearElementos(){
+        Media music = new Media(new File(CONSTANTES.RUTA_SOUNDS+"explosion.mp3").toURI().toString());
+        
         Font theFont = Font.font("Aharoni", FontWeight.BOLD, 20 );
         Pane root = new Pane();
-        Image im = new Image(CONSTANTES.RUTA_IMGS+"BG-01.jpg");
-        ImageView imv = new ImageView(im);
-        imv.setFitHeight(CONSTANTES.HEIGHT);
-        imv.setFitWidth(CONSTANTES.WIDTH);
+        ImageView imv=null;
+        switch (Controlador.skin){
+            case 1:
+                imv = new ImageView(new Image(CONSTANTES.RUTA_IMGS+"BG_02.png"));
+                break;
+            case 2:
+                imv = new ImageView(new Image(CONSTANTES.RUTA_IMGS+"BG_04.png"));
+        }
+        //imv.setFitHeight(CONSTANTES.HEIGHT);
+        //imv.setFitWidth(CONSTANTES.WIDTH);
         
         Image im_tiemp = new Image(getClass().getResourceAsStream(
                         CONSTANTES.RUTA_IMGS+"TextBox.png"),
@@ -108,7 +123,30 @@ public class VistaJuego1 {
         
         Button b = new Button();
         b.setLayoutY(100);
-        root.getChildren().addAll(b,imv,htiempo,marcador);
+        root.getChildren().addAll(new Button(),b,imv,htiempo,marcador);
+        root.setOnKeyPressed((e)->{
+            System.out.println(e.getCode());
+            Iterator <Globo> iterator = globos.iterator();
+            while(iterator.hasNext()){
+                Globo g = iterator.next();
+                if(e.getText().equals(g.getLetra().getText())){
+                    if(g.onScreen){
+                        root.getChildren().remove(g);
+                        g.onScreen=false;
+                        //globos.remove(g);
+                        if(Controlador.sondEsp){
+                            MediaPlayer mp = new MediaPlayer(music);
+                            mp.play();
+                        }
+                        numeroGlobos += 1;
+                        Globos.setText(String.valueOf(numeroGlobos)); 
+                    }
+                     
+                }
+                
+            }
+            
+        });
         return root;
     }
     
@@ -131,17 +169,17 @@ public class VistaJuego1 {
         MoverGlobo mv = new MoverGlobo(globor);
         Thread th= new Thread(mv);
         th.start();
-        globor.setOnKeyPressed((e1)->{ 
+        /*globor.setOnKeyPressed((e1)->{ 
             
             
-        });
+        });*/
    
     };
     
     
     public void CrearGloboVerde(){        
         GloboVerde globov = new GloboVerde();
-        
+        globos.add(globov);
         double posicionx = generarPosicionX();
         globov.fijarPosicion(posicionx);
            
@@ -149,13 +187,14 @@ public class VistaJuego1 {
         MoverGlobo mv = new MoverGlobo(globov);
         Thread th= new Thread(mv);
         th.start();
-        root.setOnKeyPressed((e1)->{              
+        /*root.setOnKeyPressed((e1)->{    
+                
                 if (e1.getCode().toString().toLowerCase().trim().equals(globov.getLetra().getText().trim())){ 
                     root.getChildren().remove(globov);                                       
                     numeroGlobos += 1;
                     Globos.setText(String.valueOf(numeroGlobos));                    
             }               
-            });
+            });*/
              
     };
     
@@ -163,14 +202,14 @@ public class VistaJuego1 {
     
     public void CrearGloboAmarillo(){        
         GloboAmarillo globoa = new GloboAmarillo();
-        
+        globos.add(globoa);
         double posicionx = generarPosicionX();
         globoa.fijarPosicion(posicionx);
         root.getChildren().addAll(globoa);
         MoverGlobo mv = new MoverGlobo(globoa);
         Thread th= new Thread(mv);
         th.start();
-        globoa.setOnKeyPressed((e1)->{
+        /*globoa.setOnKeyPressed((e1)->{
             System.out.println(e1.getText());  
                 if (e1.getCode().toString().toUpperCase().equals(globoa.getLetra().getText())){
                     
@@ -180,7 +219,7 @@ public class VistaJuego1 {
                     
             }
                 
-            });       
+            });*/       
         
         
     }

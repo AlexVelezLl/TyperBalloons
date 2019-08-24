@@ -23,10 +23,12 @@ import javafx.scene.text.FontWeight;
 public abstract class Globo extends Pane {
     protected Label letra;
     private boolean isEmpty;
- 
+    public boolean onScreen;
    
    public Globo(){
+       
        super();
+       onScreen = true;
    }    
     public void fijarPosicion(double x){
         this.setLayoutX(x);
@@ -44,7 +46,7 @@ public abstract class Globo extends Pane {
     }
     public static String generarLetra(){
         Random r= new Random();
-        String alphabet = "abcdefghijklmnñopqrs";
+        String alphabet = "abcdefghijklmnopqrstuvwxyz";
         char a =alphabet.charAt(r.nextInt(alphabet.length()));
         String f = String.valueOf(a);
         return f;

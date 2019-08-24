@@ -6,6 +6,7 @@
 package Vistas;
 
 import Vistas.VistaInicio;
+import controlador.Controlador;
 import java.applet.AudioClip;
 import java.io.File;
 import java.io.IOException;
@@ -32,7 +33,7 @@ import javafx.stage.Stage;
  * @author joangie
  */
 public class TyperBalloons extends Application {
-    MediaPlayer mediaplayer;
+    public static MediaPlayer mediaPlayer;
     public static Scene sc;
     @Override
     public void start(Stage primaryStage) {
@@ -43,10 +44,12 @@ public class TyperBalloons extends Application {
         
         sc = new Scene(backGround);
         //Musica de inicio   
-        /*Media musicFile = new Media("file:///C:/Users/CORE%20i7%20ULTIMATE/OneDrive%20-%20Escuela%20Superior%20Politécnica%20del%20Litoral/PROGRAMACION%20ORIENTADA%20A%20OBJETOS/ProyectoSegundoParcial/TyperBalloons/TyperBalloons/src/Recursos/sonidos/undertale_ost_fallen_down.mp3");
-        mediaplayer = new MediaPlayer(musicFile);
-        mediaplayer.setAutoPlay(true);
-        mediaplayer.setVolume(0.1);*/
+        Media musicFile = new Media(new File(CONSTANTES.RUTA_SOUNDS+"Game_Intro.mp3").toURI().toString());
+        mediaPlayer = new MediaPlayer(musicFile);
+        mediaPlayer.setAutoPlay(true);
+        Controlador.volumen=new Double(0.7);
+        mediaPlayer.setVolume(Controlador.volumen);
+        
         primaryStage.setTitle("TyperBalloons");
         primaryStage.setHeight(CONSTANTES.HEIGHT);
         primaryStage.setWidth(CONSTANTES.WIDTH);

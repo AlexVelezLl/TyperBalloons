@@ -14,7 +14,7 @@ import javafx.scene.text.FontWeight;
  */
 public class CONSTANTES {
     public final static String RUTA_IMGS = "/Recursos/imagenes/";
-    public final static String RUTA_SOUNDS = "/Recursos/sonidos/";
+    public final static String RUTA_SOUNDS = "src/Recursos/sonidos/";
     public final static double WIDTH =800;
     public final static double HEIGHT =600;
     public final static Font FUENTE = Font.font("Arial", FontWeight.BOLD, 45 );
