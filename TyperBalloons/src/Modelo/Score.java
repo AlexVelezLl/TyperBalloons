@@ -9,11 +9,21 @@ package Modelo;
  *
  * @author CORE i7 ULTIMATE
  */
-public class Score{
-    public final String nombre;
-    public final int puntaje;
-    public Score(String nombre, int puntaje){
+public class Score implements Comparable<Score>{
+    public String nombre;
+    public int puntaje;
+    
+    
+    public Score(){
+        nombre = null;
+        puntaje = 0;
+    }
+
+    public void setNombre(String nombre) {
         this.nombre = nombre;
+    }
+
+    public void setPuntaje(int puntaje) {
         this.puntaje = puntaje;
     }
     public String getNombre() {
@@ -24,4 +34,13 @@ public class Score{
         return puntaje;
     }
 
+
+    @Override
+    public int compareTo(Score o) {
+       return Integer.compare(puntaje, o.puntaje);
+    }
+
 }
+
+
+
