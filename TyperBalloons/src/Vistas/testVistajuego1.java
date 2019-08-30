@@ -6,6 +6,8 @@
 package Vistas;
 
 import Modelo.GloboAmarillo;
+import Modelo.Juego;
+import data.GameData;
 import utilities.CONSTANTES;
 import javafx.application.Application;
 import javafx.scene.Scene;
@@ -17,11 +19,11 @@ import javafx.stage.Stage;
  * @author PC
  */
 public class testVistajuego1 extends Application {
-    VistaJuego1 Juego;
+    VistaJuego2 Juego;
 
     @Override
     public void start(Stage primaryStage) throws Exception {
-        Juego = new VistaJuego1();  
+        Juego = new VistaJuego2(new Juego(),new GameData());  
         Pane root = Juego.getRoot();
         Scene sc = new Scene(root);
         primaryStage.setHeight(CONSTANTES.HEIGHT);

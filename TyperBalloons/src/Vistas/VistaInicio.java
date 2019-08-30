@@ -7,9 +7,19 @@ package Vistas;
 
 
 import Modelo.Dificultad;
+import Modelo.Score;
 import controlador.Controlador;
+import java.awt.Desktop;
+import java.io.FileInputStream;
 import utilities.*;
 import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.util.Iterator;
+import java.util.Set;
+import java.util.TreeMap;
+import java.util.TreeSet;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.application.Platform;
@@ -25,6 +35,7 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.text.Font;
 
 /**
  *
@@ -55,8 +66,8 @@ public class VistaInicio{
         ImageView inicio1 = new ImageView(new Image(CONSTANTES.RUTA_IMGS+"IniciarJuego_Button01.png"));
         ImageView punt1 = new ImageView(new Image(CONSTANTES.RUTA_IMGS+"VerPuntajes_Button01.png"));
         ImageView salir1 = new ImageView(new Image(CONSTANTES.RUTA_IMGS+"Salir_Button01.png"));
-        Pane inicio = new Pane();
-        inicio.getChildren().add(inicio1);
+        Pane inicio = new StackPane();
+        inicio.getChildren().addAll(inicio1);
         
         inicio.setOnMouseClicked((e)->{
             inicio.getChildren().clear();
@@ -115,6 +126,12 @@ public class VistaInicio{
         pFB.setOnMouseClicked((e)->{
             pFB.getChildren().clear();
             pFB.getChildren().add(fb);
+            Desktop enlace=Desktop.getDesktop();
+            try {
+                enlace.browse(new URI("https://www.facebook.com/pages/category/Video-Game/TyperBallons-POO-110771206958905/"));
+            } catch (IOException|URISyntaxException ex) {
+                ex.getMessage();
+            }
         });
         Utilities.botonSostenido(pFB, "FB_img.png", "FB_imgPressed.png");
         
@@ -123,6 +140,12 @@ public class VistaInicio{
         pTwitter.setOnMouseClicked((e)->{
             pTwitter.getChildren().clear();
             pTwitter.getChildren().add(twitter);
+            Desktop enlace=Desktop.getDesktop();
+            try {
+                enlace.browse(new URI("https://twitter.com/balloonsTyper"));
+            } catch (IOException|URISyntaxException ex) {
+                ex.getMessage();
+            }
         });
         Utilities.botonSostenido(pTwitter, "Twitter_img.png", "Twitter_imgPressed.png");
         sn.getChildren().addAll(pFB,pTwitter);
@@ -337,7 +360,51 @@ public class VistaInicio{
         Label lPuntajes = new Label("Puntajes");
         lPuntajes.setFont(CONSTANTES.FUENTE);
         lPuntajes.setTextFill(Color.WHITE);
-        pPunt.getChildren().addAll(b,ini,pSalir,lPuntajes);
+
+        VBox vBPuntajes = new VBox();
+        vBPuntajes.setLayoutX(25);
+        vBPuntajes.setLayoutY(20);
+        vBPuntajes.setMinWidth(550);
+        HBox hBDif = new HBox();
+        hBDif.setSpacing(18);
+        try(ObjectInputStream ois = new ObjectInputStream(new FileInputStream("src/data/scores.dat"))){
+            TreeMap<Dificultad,TreeSet<Score>> scores = (TreeMap<Dificultad,TreeSet<Score>>) ois.readObject();
+            for(Dificultad a : scores.keySet()){
+                Pane pDifi = new Pane();                
+                VBox difi = new VBox();
+                
+                Label ldifi = new Label(a.toString());
+                ldifi.setFont(new Font("Arial",24));
+                ldifi.setTextFill(Color.WHITE);
+                difi.getChildren().add(ldifi);
+                Set scoresDif = (Set<Score>)scores.get(a);
+                Iterator <Score> iterator = scoresDif.iterator();
+                String scoresJug ="";
+                int i =1;
+                while(iterator.hasNext()&&i<=10){
+                    Score s = iterator.next();
+                    scoresJug += i+". "+ s.getNombre()+": "+s.getPuntaje() +"\n";
+                    i++;
+                    
+                }
+                Label scoreJug = new Label(scoresJug);
+                scoreJug.setFont(new Font("Arial",16));
+                scoreJug.setTextFill(Color.WHITE);
+                difi.getChildren().add(scoreJug);
+                
+                difi.setSpacing(8);
+                difi.setLayoutX(15);
+                difi.setLayoutY(10);
+                pDifi.getChildren().addAll(new ImageView(new Image(CONSTANTES.RUTA_IMGS+"Punt_Box.png")),difi);
+                hBDif.getChildren().add(pDifi);
+            }
+        }catch(Exception ex){
+            System.out.println(ex.getMessage());
+        }
+        vBPuntajes.getChildren().addAll(lPuntajes,hBDif);
+        vBPuntajes.setAlignment(Pos.CENTER);
+        vBPuntajes.setSpacing(10);
+        pPunt.getChildren().addAll(b,ini,vBPuntajes,pSalir);
         pPunt.setLayoutX(100);
         pPunt.setLayoutY(-500);
         

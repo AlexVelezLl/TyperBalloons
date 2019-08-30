@@ -125,6 +125,7 @@ public class VistaJuego1 {
         b.setLayoutY(100);
         root.getChildren().addAll(new Button(),b,imv,htiempo,marcador);
         root.setOnKeyPressed((e)->{
+            
             System.out.println(e.getCode());
             Iterator <Globo> iterator = globos.iterator();
             while(iterator.hasNext()){
@@ -133,8 +134,9 @@ public class VistaJuego1 {
                     if(g.onScreen){
                         root.getChildren().remove(g);
                         g.onScreen=false;
-                        //globos.remove(g);
+
                         if(Controlador.sondEsp){
+                            
                             MediaPlayer mp = new MediaPlayer(music);
                             mp.play();
                         }

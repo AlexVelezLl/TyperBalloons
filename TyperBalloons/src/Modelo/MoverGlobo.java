@@ -31,6 +31,7 @@ public class MoverGlobo implements Runnable {
                     System.out.println("Ocurrio un error");
                 }
         }
-        VistaJuego1.globos.remove(globo);
+        globo.onScreen=false;
+        
     }
 }

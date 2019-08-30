@@ -5,18 +5,24 @@
  */
 package Modelo;
 
+import java.io.Serializable;
+
 /**
  *
  * @author CORE i7 ULTIMATE
  */
-public class Score implements Comparable<Score>{
+public class Score implements Comparable<Score>,Serializable{
     public String nombre;
     public int puntaje;
     
-    
     public Score(){
         nombre = null;
-        puntaje = 0;
+        puntaje=0;
+    }
+    
+    public Score(String nombre, int puntaje){
+        this.nombre = nombre;
+        this.puntaje = puntaje;
     }
 
     public void setNombre(String nombre) {
@@ -37,8 +43,16 @@ public class Score implements Comparable<Score>{
 
     @Override
     public int compareTo(Score o) {
-       return Integer.compare(puntaje, o.puntaje);
+        int c = -1*((new Integer(puntaje)).compareTo(((Score)o).puntaje));
+        if(c==0){
+            c = nombre.compareTo(o.nombre);
+            if (c==0){
+                c = (new Integer(this.hashCode())).compareTo(this.hashCode());
+            }
+        }
+        return c;
     }
+
 
 }
 

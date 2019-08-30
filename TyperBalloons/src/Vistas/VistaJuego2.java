@@ -74,7 +74,7 @@ public class VistaJuego2 {
         root = new Pane();
         root.setPadding(new Insets(20,0,20,20));
         //un background
-        Image bG = new Image(CONSTANTES.RUTA_IMGS+"project.png");
+        Image bG = new Image(CONSTANTES.RUTA_IMGS+"BG_04.png");
         ImageView bGView = new ImageView(bG);
         
         //Creando la parte donde aparecen las letras ((izq))
@@ -94,8 +94,8 @@ public class VistaJuego2 {
         
         //Parte derecha
         
-        //VBox der= new VBox(); 
-        Image tf = new Image(CONSTANTES.RUTA_IMGS+"TextBox_prueba.png",200,100,false,false);
+        
+        Image tf = new Image(CONSTANTES.RUTA_IMGS+"TextBox.png",200,100,false,false);
         ImageView tfView = new ImageView(tf);
         Label l1 = new Label("Ingrese su palabra");
         TextField player_word= new TextField(); 
@@ -142,8 +142,7 @@ public class VistaJuego2 {
             
         }
         
-        Image spback = new Image(CONSTANTES.RUTA_IMGS+"coso.jpg",USE_COMPUTED_SIZE,500,false,false);
-        ImageView spview = new ImageView(tf);
+       
         sp.setContent(playerLetters);
         
         
