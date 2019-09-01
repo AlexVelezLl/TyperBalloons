@@ -14,15 +14,25 @@ import java.io.Serializable;
 public class Score implements Comparable<Score>,Serializable{
     public String nombre;
     public int puntaje;
+    private Dificultad df;
+    
     
     public Score(){
         nombre = null;
-        puntaje=0;
+        puntaje = 0;
+        df=null;
     }
-    
-    public Score(String nombre, int puntaje){
-        this.nombre = nombre;
-        this.puntaje = puntaje;
+
+    public Score(Dificultad df) {
+        this.df = df;
+        nombre = "";
+        puntaje=0; 
+        
+    }
+
+    Score(String nombre, int i) {
+        this.nombre=nombre;
+        puntaje=i;//To change body of generated methods, choose Tools | Templates.
     }
 
     public void setNombre(String nombre) {
@@ -42,7 +52,7 @@ public class Score implements Comparable<Score>,Serializable{
 
 
     @Override
-    public int compareTo(Score o) {
+    public int compareTo(Score o){
         Integer punt = puntaje;
         int c = -1*(punt.compareTo(((Score)o).puntaje));
         if(c==0){
@@ -53,6 +63,11 @@ public class Score implements Comparable<Score>,Serializable{
         }
         return c;
     }
+
+    public Dificultad getDf() {
+        return df;
+    }
+        
 
 
 }
