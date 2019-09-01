@@ -80,7 +80,7 @@ public class VistaJuego2 {
     }
  
  /**
-  * Finaliza el juego
+  * Metodo que finaliza el juego
   */   
     public void finalizarJuego(){
         terminarJuego=true;
@@ -89,7 +89,7 @@ public class VistaJuego2 {
     /**
      * Crea los elementos del juego
      * @param pd informacion del Juego 
-     * @return Pane 
+     * @return Pane con elementos del juego
      */
     public Pane elementos(Juego pd){
         onRoot = new Pane();
@@ -173,8 +173,7 @@ public class VistaJuego2 {
         tfView.setLayoutY(240);
         player_word.setLayoutX(440);
         player_word.setLayoutY(180);
-        Thread timer = new Thread(new HiloTiempo());
-        timer.start();
+        
         iniciarJuego(player_word,player_unique,game_words,player_l,theFont,l2);
         return root;
         
@@ -182,14 +181,16 @@ public class VistaJuego2 {
     
     /**
      * Inicia el juego para que el usuario pueda dar enter al escribir una palabra
-     * @param player_word
-     * @param player_unique
-     * @param game_words
-     * @param player_l
-     * @param theFont
-     * @param l2 
+     * @param player_word palabra que ingresa el usuario en text field
+     * @param player_unique set de palabras que ha ingresado el usuario
+     * @param game_words diccionario de palabras del juego
+     * @param player_l un hashMap con las letras del jugador y su stock
+     * @param theFont 
+     * @param l2 Label que indicará al jugador si está ingresando palabras correctas
      */
     public void iniciarJuego(TextField player_word, Set<String> player_unique, HashMap<String,Integer> game_words,HashMap<String,Integer> player_l,Font theFont, Label l2){
+        Thread timer = new Thread(new HiloTiempo());
+        timer.start();
         player_word.setOnKeyPressed((e)->{
               if(e.getCode().equals(KeyCode.ENTER)&& tiempoTranscurrido<30){
                   String user_word = player_word.getText().toLowerCase(); //obteniendo palabra
@@ -295,8 +296,8 @@ public class VistaJuego2 {
                 //regreso a ventana principal
                 });
                 
-                
                 shareScore.setOnMouseClicked(e->{
+                    
                     try {
                         
                     String p= String.valueOf(pTotal);
@@ -308,7 +309,9 @@ public class VistaJuego2 {
 
                 //Guardando info de usuario
                 submit.setOnMouseClicked(e->{
+                        submit.setDisable(true);
                         pd.getPlayer_score().setNombre(userData.getText());
+                        pd.getPlayer_score().setPuntaje(pTotal);
                         try {
                             TreeMap<Dificultad,TreeSet<Score>> scoresGame= LeerArchivo();
                             if(scoresGame!=null){
@@ -323,7 +326,7 @@ public class VistaJuego2 {
                             }
                             
                         } catch (FileNotFoundException ex) {
-                            showTrabajando();
+                            showPrimerJugador();
                     }
                 });
                Over.getChildren().addAll(ini,vf);
@@ -342,9 +345,9 @@ public class VistaJuego2 {
     }
    
     /**
-     * Leer el archivo scores.dat
-     * @param f
-     * @return
+     * Método que sirve para Leer un archivo .dat y así agregar los nuevos puntajes de scores
+     * @return TreeMap con clave dificulltad y value de TreeSet de Scores para así facilitar la generación
+     * de una tabla de resultados
      * @throws FileNotFoundException 
      */
      public TreeMap<Dificultad,TreeSet<Score>> LeerArchivo() throws FileNotFoundException{
@@ -363,7 +366,7 @@ public class VistaJuego2 {
             return scoresG;
             
             }catch (IOException ex) {
-            showTrabajando();
+            showPrimerJugador();
             } catch (ClassNotFoundException ex) {
             showTrabajando();
         }
@@ -371,18 +374,16 @@ public class VistaJuego2 {
      }
      
      /**
-     * Escribiendo los resultados en un archivo.dat para asi generar una tabla de resultados
-     * @param s Score del usuario
-     * @param scoresF 
+     * Método que sirve para escribir los resultados en un archivo .dat para asi generar una tabla de puntajes
      */
     private void escribir1(){
         try(ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream("src/data/scores.dat"))){
             Score f= pd.getPlayer_score();
             
             TreeMap<Dificultad,TreeSet<Score>> scoresG = new TreeMap();
-            scoresG.put(Dificultad.FACIL, new TreeSet<Score>());
-            scoresG.put(Dificultad.MEDIO, new TreeSet<Score>());
-            scoresG.put(Dificultad.DIFICIL, new TreeSet<Score>());
+            scoresG.put(Dificultad.FACIL, new TreeSet<>());
+            scoresG.put(Dificultad.MEDIO, new TreeSet<>());
+            scoresG.put(Dificultad.DIFICIL, new TreeSet<>());
             scoresG.get(pd.getDf()).add(f); 
             oos.writeObject(scoresG);
             
@@ -395,11 +396,12 @@ public class VistaJuego2 {
     }
     
     /**
-     * Escribir sobre los scores del juego, el nuevo score del usuario
-     * @param scoregame 
+     * Método para sobreescribir sobre los scores del juego
+     * @param scoregame Scoregame es un TreeMap que sirve para separar los scores por Dificultad
+     * contiene como key la dificultad del juego y como value un TreeSet de scores para ordenarlos 
+     * de mayor a menor
      */
      private void escribir2(TreeMap<Dificultad,TreeSet<Score>> scoregame){
-        scoregame.get(pd.getDf()).add(pd.getPlayer_score()); 
         try(ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream("src/data/scores.dat"))){
             oos.writeObject(scoregame);
         } catch (FileNotFoundException ex) {
@@ -409,11 +411,23 @@ public class VistaJuego2 {
         }
     }
      
-     
+    /**
+     * Método para manejar ciertas excepciones
+     */
     private void showTrabajando() {
         Alert alert = new Alert(AlertType.INFORMATION);
         alert.setTitle("WOOPS!");
         alert.setContentText("Dificultades tecnicas, estamos trabajando en ello");
+        alert.showAndWait();
+    }
+    
+    /**
+     * Método para mostrar mensaje a nuestro primer jugador
+     */
+    private void showPrimerJugador() {
+        Alert alert = new Alert(AlertType.INFORMATION);
+        alert.setTitle("GRACIAS!");
+        alert.setContentText("Eres nuestro primer jugador!");
         alert.showAndWait();
     }
 }
