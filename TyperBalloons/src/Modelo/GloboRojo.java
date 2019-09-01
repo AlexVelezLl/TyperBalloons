@@ -17,13 +17,16 @@ import javafx.scene.text.FontWeight;
 
 /**
  *
- * @author PC
+ * @author Valeria Barzola
  */
 public class GloboRojo extends Globo {
     private final ImageView globorojo;
-    private Label letra;
-    ArrayList<String> letras = new ArrayList<>();
+    
+    /**
+    * Constructor del globo rojo que setea la imagen definida para este globo y añade las letras creadas
+    */
     public GloboRojo(){  
+        letralabel= new Label();
         
         Image img = new Image(getClass().getResourceAsStream(
                         CONSTANTES.RUTA_IMGS+"Globo_Rojo.png"),
@@ -37,21 +40,17 @@ public class GloboRojo extends Globo {
             String s = Globo.generarLetra();
             letras.add(s);
         }
-        String p="";
-        for(String s: letras){
-             p+=s;
-        }
-        letra =  new Label(p);
-        Font theFont = Font.font(
-                "Helvetica", FontWeight.BOLD, 28);        
-        letra.setFont(theFont);
-        letra.setTextFill(Color.web("#FFFFFF"));
-        letra.setLayoutY(15);
-        letra.setLayoutX(24);
+        
+        añadirLetras(letras);
+     
         globorojo = new ImageView(img);
         
-        this.getChildren().addAll(globorojo,letra);
+        this.getChildren().addAll(globorojo,letralabel);
 }
+    
+    
+    
+    
 
   
 }

@@ -17,13 +17,17 @@ import javafx.scene.text.FontWeight;
 
 /**
  *
- * @author PC
+ * @author Valeria Barzola
  */
 public class GloboAmarillo extends Globo{
+    
     private final ImageView globoamarillo;
     
-   
-    public GloboAmarillo(){                        
+   /**
+    * Constructor del globo amarillo que setea la imagen definida para este globo y añade las letras creadas
+    */
+    public GloboAmarillo(){ 
+        letralabel= new Label();
         Image img = new Image(getClass().getResourceAsStream(
                         CONSTANTES.RUTA_IMGS+"Globo_Amarillo.png"),
                                 150,
@@ -32,18 +36,10 @@ public class GloboAmarillo extends Globo{
                                 true);
         globoamarillo= new ImageView(img);
         String s = Globo.generarLetra().toUpperCase();
-        setLetra(s);
-        this.getChildren().addAll(globoamarillo,letra);  
+        letras.add(s);
+        añadirLetras(letras);        
+        this.getChildren().addAll(globoamarillo,letralabel);  
 }
 
-    
-    
-    public boolean GloboEmpty(){
-        if (letra.getText().trim().isEmpty()) {
-            return true;
-            
-        }
-        return false;
-    }     
     
 }

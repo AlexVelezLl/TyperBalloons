@@ -7,6 +7,9 @@ package Vistas;
 
 
 import Modelo.Dificultad;
+import static Modelo.Dificultad.DIFICIL;
+import static Modelo.Dificultad.FACIL;
+import static Modelo.Dificultad.MEDIO;
 import Modelo.Score;
 import controlador.Controlador;
 import java.awt.Desktop;
@@ -310,7 +313,7 @@ public class VistaInicio{
         pFacil.setOnMouseClicked((e)->{
             pFacil.getChildren().clear();
             pFacil.getChildren().add(facil);
-            VistaJuego1 vj = new VistaJuego1();
+            VistaJuego1 vj = new VistaJuego1(FACIL);
             
             Utilities.transition(root,vj.getRoot());
         });
@@ -322,7 +325,7 @@ public class VistaInicio{
         pMedio.setOnMouseClicked((e)->{
             pMedio.getChildren().clear();
             pMedio.getChildren().add(medio);
-            VistaJuego1 vj = new VistaJuego1();
+            VistaJuego1 vj = new VistaJuego1(MEDIO);
             Utilities.transition(root,vj.getRoot());
         });
         ImageView dificil = new ImageView(new Image(CONSTANTES.RUTA_IMGS+"Dificil_Button01.png"));
@@ -332,7 +335,7 @@ public class VistaInicio{
         pDificil.setOnMouseClicked((e)->{
             pDificil.getChildren().clear();
             pDificil.getChildren().add(dificil);
-            VistaJuego1 vj = new VistaJuego1();
+            VistaJuego1 vj = new VistaJuego1(DIFICIL);
             Utilities.transition(root,vj.getRoot());
         });
         dificultad.getChildren().addAll(lDificultad,pFacil,pMedio,pDificil);

@@ -5,6 +5,7 @@
  */
 package Modelo;
 
+import java.util.ArrayList;
 import utilities.CONSTANTES;
 import java.util.Random;
 import javafx.geometry.Pos;
@@ -17,19 +18,28 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 
 /**
- *
- * @author PC
+ * Clase padre globo que presenta las caracteristicas generales de todos los tipos de globos
+ * @author Valeria Barzola
  */
-public abstract class Globo extends Pane {
-    protected Label letra;
-    private boolean isEmpty;
-    public boolean onScreen;
+public abstract class Globo extends Pane {      
+    public boolean onScreen; 
+    protected Label letralabel;
+    ArrayList<String> letras = new ArrayList<>();
+
+    
    
+   /**
+    * Constructor que inicializa los globos con OnScreen true
+    */
    public Globo(){
        
        super();
-       onScreen = true;
+       onScreen = true;      
    }    
+   /**
+    * Metodo que fija la posición en la ventana de un globo
+    * @param x double, posición
+    */
     public void fijarPosicion(double x){
         this.setLayoutX(x);
         this.setLayoutY(CONSTANTES.HEIGHT);
@@ -44,6 +54,11 @@ public abstract class Globo extends Pane {
     public double getPosicionY(){
         return this.getLayoutY();
     }
+    
+    /**
+     * Metodo que genera una letra del abedecedario para ingresarla al globo
+     * @return String letra obtenida
+     */
     public static String generarLetra(){
         Random r= new Random();
         String alphabet = "abcdefghijklmnopqrstuvwxyz";
@@ -52,33 +67,32 @@ public abstract class Globo extends Pane {
         return f;
     }
     
-    public Label getLetra() {
-        return letra;
-    }
-    
-    public void setLetra(String s_letra){
+    /**
+     * Metodo que establece el label del globo con un arreglo de letras
+     * @param array Letras a ingresar en el globo
+     */
+    public void añadirLetras(ArrayList<String> array){
+         String p="";
+        for(String s: array){
+             p+=s;
+        }        
+        letralabel.setText(p);
         Font theFont = Font.font(
-                "Helvetica", FontWeight.BOLD, 35 );
-        Label l = new Label(s_letra);
-        l.setFont(theFont);
-        l.setTextFill(Color.web("#FFFFFF"));
-        l.setLayoutY(15);
-        l.setLayoutX(24);
-        this.letra = l;
+                "Helvetica", FontWeight.BOLD, 28);        
+        letralabel.setFont(theFont);
+        letralabel.setTextFill(Color.web("#FFFFFF"));
+        letralabel.setLayoutY(15);
+        letralabel.setLayoutX(24);
     }
     
-    public void EliminarLetra(String letraObtenida){
-        if (this.letra.getText().contains(letraObtenida)) {
-            String s2= this.letra.getText().replace(letraObtenida, "");
-            letra.setText(s2.trim());
-            
-            
-        }
-
-        
+    /**
+     * Metodo que devuelve el array de letras de cada globo
+     * @return ArrayList<String> perteneciente al globo
+     */
+    public ArrayList<String> getLetras() {
+        return letras;
     }
     
-    
-    
+ 
     
 }

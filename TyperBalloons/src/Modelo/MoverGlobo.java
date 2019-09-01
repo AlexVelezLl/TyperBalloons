@@ -10,7 +10,7 @@ import javafx.application.Platform;
 
 /**
  *
- * @author PC
+ * @author Valeria Barzola
  */
 public class MoverGlobo implements Runnable {
     Globo globo;
@@ -26,7 +26,7 @@ public class MoverGlobo implements Runnable {
             globo.setLayoutY(globo.getPosicionY()-1);
             });
                 try {
-                    Thread.sleep(5);
+                    Thread.sleep(10);
                 } catch (InterruptedException ex) {
                     System.out.println("Ocurrio un error");
                 }
