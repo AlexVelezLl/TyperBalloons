@@ -9,13 +9,16 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 
 /**
- *
- * @author CORE i7 ULTIMATE
+ * Clase donde se definen constantes que seran de gran utilidad a lo largo de 
+ * la ejecucion de la aplicacion
+ * @author Alex Velez
  */
-public class CONSTANTES {
-    public final static String RUTA_IMGS = "/Recursos/imagenes/";
-    public final static String RUTA_SOUNDS = "src/Recursos/sonidos/";
-    public final static double WIDTH =800;
-    public final static double HEIGHT =600;
-    public final static Font FUENTE = Font.font("Arial", FontWeight.BOLD, 45 );
+public final class CONSTANTES {
+    public static final String RUTA_IMGS = "/Recursos/imagenes/";
+    public static final String RUTA_SOUNDS = "src/Recursos/sonidos/";
+    public static final double WIDTH =800;
+    public static final double HEIGHT =600;
+    public static final Font FUENTE = Font.font("Arial", FontWeight.BOLD, 45 );
+    public static final Font FUENTE2 = Font.font("Comic Sans MS",FontWeight.BOLD,30);
+    private CONSTANTES(){}
 }

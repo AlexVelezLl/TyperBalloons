@@ -43,11 +43,12 @@ public class Score implements Comparable<Score>,Serializable{
 
     @Override
     public int compareTo(Score o) {
-        int c = -1*((new Integer(puntaje)).compareTo(((Score)o).puntaje));
+        Integer punt = puntaje;
+        int c = -1*(punt.compareTo(((Score)o).puntaje));
         if(c==0){
             c = nombre.compareTo(o.nombre);
             if (c==0){
-                c = (new Integer(this.hashCode())).compareTo(this.hashCode());
+                c = hashCode();
             }
         }
         return c;

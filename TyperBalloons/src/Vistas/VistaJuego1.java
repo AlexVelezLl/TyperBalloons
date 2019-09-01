@@ -88,7 +88,7 @@ public class VistaJuego1 {
         Font theFont = Font.font("Aharoni", FontWeight.BOLD, 20 );
         Pane root = new Pane();
         ImageView imv=null;
-        switch (Controlador.skin){
+        switch (Controlador.getSkin()){
             case 1:
                 imv = new ImageView(new Image(CONSTANTES.RUTA_IMGS+"BG_02.png"));
                 break;
@@ -207,7 +207,7 @@ public class VistaJuego1 {
                 if (gb.getLetras().isEmpty()) {
                     root.getChildren().remove(gb);
                     gb.onScreen=false;
-                        if(Controlador.sondEsp){
+                        if(Controlador.isSondEsp()){
                             
                             MediaPlayer mp = new MediaPlayer(music);
                             mp.play();

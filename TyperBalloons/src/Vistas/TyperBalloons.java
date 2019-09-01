@@ -7,34 +7,27 @@ package Vistas;
 
 import Vistas.VistaInicio;
 import controlador.Controlador;
-import java.applet.AudioClip;
 import java.io.File;
-import java.io.IOException;
-import java.nio.file.FileSystems;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import utilities.CONSTANTES;
 import javafx.application.Application;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.layout.Pane;
-import javafx.scene.layout.StackPane;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.stage.Stage;
 
 /**
- *
- * @author joangie
+ * Clase principal de la aplicacion desde donde se crea la ventana principal donde
+ * sera ejecutado nuestro juego.
+ * @author Alex Velez
  */
 public class TyperBalloons extends Application {
-    public static MediaPlayer mediaPlayer;
-    public static Scene sc;
+    /**
+     * Metodo sobreEscrito a la clase Application donde se desarrollara la 
+     * estructura de la aplicacion
+     * @param primaryStage Stage Principal donde se vera la aplicacion.
+     */
     @Override
     public void start(Stage primaryStage) {
         
@@ -42,25 +35,26 @@ public class TyperBalloons extends Application {
         
         Pane backGround = index.getRoot();
         
-        sc = new Scene(backGround);
+        Controlador.setScene(new Scene(backGround));
         //Musica de inicio   
         Media musicFile = new Media(new File(CONSTANTES.RUTA_SOUNDS+"Game_Intro.mp3").toURI().toString());
-        mediaPlayer = new MediaPlayer(musicFile);
-        mediaPlayer.setAutoPlay(true);
-        Controlador.volumen=new Double(0.7);
-        mediaPlayer.setVolume(Controlador.volumen);
+        Controlador.setMediaPlayer(new MediaPlayer(musicFile));
+        Controlador.getMediaPlayer().setAutoPlay(true);
+  
+        Controlador.getMediaPlayer().setVolume(0.7);
         
         primaryStage.setTitle("TyperBalloons");
         primaryStage.setHeight(CONSTANTES.HEIGHT);
         primaryStage.setWidth(CONSTANTES.WIDTH);
         primaryStage.setResizable(false);
-        primaryStage.setScene(sc);
+        primaryStage.setScene(Controlador.getScene());
         primaryStage.getIcons().add(new Image(CONSTANTES.RUTA_IMGS+"ICO_01.png")); 
         primaryStage.show();
     }
 
     /**
-     * @param args the command line arguments
+     * Metodo principal de la aplicacion
+     * @param args 
      */
     public static void main(String[] args) {
         launch(args);
