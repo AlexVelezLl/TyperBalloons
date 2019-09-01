@@ -14,17 +14,13 @@ import java.io.Serializable;
 public class Score implements Comparable<Score>,Serializable{
     public String nombre;
     public int puntaje;
-    private Dificultad df;
-    
     
     public Score(){
         nombre = null;
         puntaje = 0;
-        df=null;
     }
 
     public Score(Dificultad df) {
-        this.df = df;
         nombre = "";
         puntaje=0; 
         
@@ -49,8 +45,7 @@ public class Score implements Comparable<Score>,Serializable{
     public int getPuntaje() {
         return puntaje;
     }
-
-
+    
     @Override
     public int compareTo(Score o){
         Integer punt = puntaje;
@@ -63,13 +58,6 @@ public class Score implements Comparable<Score>,Serializable{
         }
         return c;
     }
-
-    public Dificultad getDf() {
-        return df;
-    }
-        
-
-
 }
 
 
