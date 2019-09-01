@@ -10,6 +10,7 @@ import utilities.CONSTANTES;
 import Modelo.Juego;
 import Modelo.Score;
 import java.awt.Desktop;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -29,6 +30,7 @@ import java.util.logging.Logger;
 import javafx.application.Platform;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
@@ -40,6 +42,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.Background;
+import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import static javafx.scene.layout.Region.USE_COMPUTED_SIZE;
@@ -48,7 +51,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
-import utilities.Utilities.*;
+import utilities.Utilities;
 
 
 
@@ -90,13 +93,14 @@ public class VistaJuego2 {
      */
     public Pane elementos(Juego pd){
         onRoot = new Pane();
+        
         HashMap<String,Integer> game_words= pd.getGame_words(); 
         HashMap<String,Integer> player_l= pd.getPlayer_l();
         Set <String> player_unique = new HashSet<>();
         TreeMap<Dificultad,TreeSet<Score>> scores_players= pd.getScoresF(); 
         
-        Font theFont = Font.font("Helvetica", FontWeight.BOLD, 24 );
-        Font tFont = Font.font("Helvetica", FontWeight.BOLD, 32 );
+        Font theFont = Font.font("Helvetica", FontWeight.BOLD,24);
+        Font tFont = Font.font("Helvetica", FontWeight.BOLD,32);
 
         //tiempo
         HBox t= new HBox();
@@ -105,12 +109,11 @@ public class VistaJuego2 {
         tiempo = new Label("0");
         tiempo.setFont(theFont);
         t.getChildren().addAll(lt,tiempo); 
-        Thread timer = new Thread(new HiloTiempo());
-        timer.start();
+        
         //creando espacio
         onRoot.setPadding(new Insets(20,0,20,20));
         //un background
-        Image bG = new Image(CONSTANTES.RUTA_IMGS+"BG_04.png");
+        Image bG = new Image(CONSTANTES.RUTA_IMGS+"BG_03.png");
         ImageView bGView = new ImageView(bG);
         //Creando la parte donde aparecen las letras ((izq))
         ScrollPane sp = new ScrollPane(); //Para facilitar la visualizacion crearemos un scrollpane 
@@ -170,6 +173,8 @@ public class VistaJuego2 {
         tfView.setLayoutY(240);
         player_word.setLayoutX(440);
         player_word.setLayoutY(180);
+        Thread timer = new Thread(new HiloTiempo());
+        timer.start();
         iniciarJuego(player_word,player_unique,game_words,player_l,theFont,l2);
         return root;
         
@@ -214,7 +219,7 @@ public class VistaJuego2 {
                                }    
                             }}}
                             if(disponible==user_word.length()&& tiempoTranscurrido<30){
-                             l2.setText("Nice!");
+                                l2.setText("Nice!");
                                 System.out.println(tiempoTranscurrido);
                              pTotal= pTotal +game_words.get(user_word);
                                 System.out.println(pTotal);
@@ -223,6 +228,8 @@ public class VistaJuego2 {
                             }
                        }else if(!game_words.containsKey(user_word)){
                                 l2.setText("Woops! Esa palabra no existe!");
+                       }else if(user_word.length()==0){
+                           l2.setText("Vacio! Piensa mejor");
                        }else{
                         l2.setText("Woops! ya ingresaste esa palabra");
                     }
@@ -234,10 +241,9 @@ public class VistaJuego2 {
      * Contador del tiempo para la duracion del juego
      */
     private class HiloTiempo implements Runnable{
-
         @Override
         public void run() {
-            while(!terminarJuego&&tiempoTranscurrido<30){
+            while(!terminarJuego&&tiempoTranscurrido<10){
                 tiempoTranscurrido+=1;
                 Platform.runLater(()->{
                     tiempo.setText(String.valueOf(tiempoTranscurrido)); 
@@ -250,130 +256,165 @@ public class VistaJuego2 {
                 }
             }
             finalizarJuego();
-            onRoot.getChildren().clear();
-            Pane result= resultados();
-            Platform.runLater(()->{
-                utilities.Utilities.bajarCartel(onRoot,result,200);
-            });
-        }
-    }
-    
-    /**
-     * Pane de resultados que pide al jugador que ingrese su nombre y presenta al jugador su puntaje
-     * @return Pane
-     */
-    private Pane resultados(){
-        Pane Over = new StackPane();
-        ImageView ini = new ImageView(new Image(CONSTANTES.RUTA_IMGS+"BG_IJ02.png"));
-        Label ltitulo = new Label("Gracias por jugar!");
-        ltitulo.setTextFill(Color.WHITE);
-        ltitulo.setFont(CONSTANTES.FUENTE);
-        VBox vf = new VBox(); 
-        Button continuar= new Button();
-        Label puntuacion = new Label("Ha alcanzado la siguietne puntuacion: "+String.valueOf(pTotal));
-        Label finished= new Label("Ha terminado el juego, por favor ingrese su nombre");
-        TextField userData = new TextField(); 
-        
-        userData.setOnKeyPressed(e->{
-            if(e.getCode().equals(KeyCode.ENTER)){
-                String user_name= userData.getText();
-                pd.getPlayer_score().setNombre(user_name);
-                try {
-                    TreeMap<Dificultad,TreeSet<Score>> scoresGame= LeerArchivo(pd.getPlayer_score());
-                    
-                } catch (FileNotFoundException ex) {
-                    escribiendoResultados1(pd.getPlayer_score());
-                }
-            }
-        });
-        
-        Button compartirPuntaje= new Button("Compartir Puntaje");
-        compartirPuntaje.setOnAction(e->{
-            try {
-            String p= String.valueOf(pTotal);
-            Desktop.getDesktop().browse(new URI("https://twitter.com/intent/tweet?hashtags=TyperBallon&text=He+alcanzado+"+p+"+puntos&via=BalloonsTyper"));
-            }catch (URISyntaxException | IOException ex) {
-            Logger.getLogger(VistaJuego2.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        });
-        
-        vf.getChildren().addAll(puntuacion,finished,userData);
-        continuar.setOnMouseClicked(e-> {
-           //llevar ventana inicio
-        });
-        Over.getChildren().addAll(vf,continuar);
-        Over.setLayoutX(100);
-        Over.setLayoutY(-500);
-        return Over; 
-        
-        }
-    
+                Platform.runLater(()->{
 
+                Pane Over = new Pane();
+                ImageView ini = new ImageView(new Image(CONSTANTES.RUTA_IMGS+"BG_IJ02.png"));
+
+                Label ltitulo = new Label("Gracias por jugar!");
+                ltitulo.setTextFill(Color.WHITE);
+                ltitulo.setFont(CONSTANTES.FUENTE);
+                
+                Font thef= Font.font("Helvetica", FontWeight.BOLD,16);
+                VBox vf = new VBox(); 
+                vf.setLayoutX(90);
+                vf.setLayoutY(70);
+                vf.setPadding(new Insets(10, 10, 10, 10));  
+                vf.setPrefSize(USE_COMPUTED_SIZE, USE_COMPUTED_SIZE);
+                
+                Label puntuacion = new Label("Ha alcanzado la siguiente puntuacion: "+String.valueOf(pTotal));
+                Label finished= new Label("Ha terminado el juego, por favor ingrese su nombre");
+                Button submit= new Button("submit");
+                TextField userData = new TextField(); 
+                HBox userInfo= new HBox();
+                userInfo.getChildren().addAll(userData,submit);
+                puntuacion.setFont(thef); puntuacion.setTextFill(Color.WHITE);
+                finished.setFont(thef);finished.setTextFill(Color.WHITE);
+                HBox buttons = new HBox();
+                Pane shareScore = utilities.Utilities.boton("Share","GreenButton");
+                Pane continuar= utilities.Utilities.boton("Continuar", "GreenButton");
+                buttons.getChildren().addAll(shareScore,continuar); 
+                vf.setSpacing(20);
+                buttons.setSpacing(20);
+                
+                buttons.setPadding(new Insets(30, 30, 30, 30));  
+
+                vf.getChildren().addAll(ltitulo,puntuacion,finished,userInfo,buttons);
+
+                continuar.setOnMouseClicked(e->{
+                //regreso a ventana principal
+                });
+                
+                
+                shareScore.setOnMouseClicked(e->{
+                    try {
+                        
+                    String p= String.valueOf(pTotal);
+                    Desktop.getDesktop().browse(new URI("https://twitter.com/intent/tweet?hashtags=TyperBallon&text=He+alcanzado+"+p+"+puntos&via=BalloonsTyper"));
+                    }catch (URISyntaxException | IOException ex) {
+                    showTrabajando();
+                    }
+                });
+
+                //Guardando info de usuario
+                submit.setOnMouseClicked(e->{
+                        pd.getPlayer_score().setNombre(userData.getText());
+                        try {
+                            TreeMap<Dificultad,TreeSet<Score>> scoresGame= LeerArchivo();
+                            if(scoresGame!=null){
+                                System.out.println("Leyendo y escribiendo...");
+                                escribir2(scoresGame);
+                                System.out.println(scoresGame);
+                            }else{
+                                System.out.println("Escribiendo...");
+                                System.out.println("No se sobreescribio ya fue");
+                                System.out.println(scoresGame);
+                            escribir1(); 
+                            }
+                            
+                        } catch (FileNotFoundException ex) {
+                            showTrabajando();
+                    }
+                });
+               Over.getChildren().addAll(ini,vf);
+
+                
+                Over.setLayoutX(100);
+                Over.setLayoutY(-500);
+                Utilities.bajarCartel(onRoot, Over, 200);
+                });
+            
+            }
+        }
+    
     public Pane getRoot() {
         return root;
     }
-    
-    
-    private void escribiendoResultados2(Score s,TreeMap<Dificultad,TreeSet<Score>> scoregame){
-        scoregame.get(s.getDf()).add(s); 
-        try(ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream("src/data/scores.dat"))){
-            oos.writeObject(scoregame);
-        } catch (FileNotFoundException ex) {
-            Logger.getLogger(VistaJuego2.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (IOException ex) {
-            Logger.getLogger(VistaJuego2.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }
-    
+   
     /**
+     * Leer el archivo scores.dat
+     * @param f
+     * @return
+     * @throws FileNotFoundException 
+     */
+     public TreeMap<Dificultad,TreeSet<Score>> LeerArchivo() throws FileNotFoundException{
+         TreeMap<Dificultad,TreeSet<Score>> scoresG; 
+         try(ObjectInputStream ois = new ObjectInputStream(new FileInputStream("src/data/scores.dat"))){
+                Score f= pd.getPlayer_score();
+                scoresG = (TreeMap<Dificultad,TreeSet<Score>>)ois.readObject();
+                Dificultad df= pd.getDf(); 
+                if(scoresG.containsKey(df)){
+                    scoresG.get(df).add(f); 
+                }else{
+                    TreeSet<Score> scorep= new TreeSet();
+                    scorep.add(f); 
+                    scoresG.put(df, scorep); 
+                }
+            return scoresG;
+            
+            }catch (IOException ex) {
+            showTrabajando();
+            } catch (ClassNotFoundException ex) {
+            showTrabajando();
+        }
+         return null;
+     }
+     
+     /**
      * Escribiendo los resultados en un archivo.dat para asi generar una tabla de resultados
      * @param s Score del usuario
      * @param scoresF 
      */
-    private void escribiendoResultados1(Score s){
+    private void escribir1(){
         try(ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream("src/data/scores.dat"))){
+            Score f= pd.getPlayer_score();
+            
             TreeMap<Dificultad,TreeSet<Score>> scoresG = new TreeMap();
             scoresG.put(Dificultad.FACIL, new TreeSet<Score>());
             scoresG.put(Dificultad.MEDIO, new TreeSet<Score>());
             scoresG.put(Dificultad.DIFICIL, new TreeSet<Score>());
-            System.out.println("...se escribio...?");
+            scoresG.get(pd.getDf()).add(f); 
             oos.writeObject(scoresG);
             
+            
         }catch (FileNotFoundException ex) {
-                Logger.getLogger(VistaJuego2.class.getName()).log(Level.SEVERE, null, ex);
+                showTrabajando();
         }catch (IOException ex) {
-                Logger.getLogger(VistaJuego2.class.getName()).log(Level.SEVERE, null, ex);
+                showTrabajando();
         }
     }
-                
     
-     private void showTrabajando() {
+    /**
+     * Escribir sobre los scores del juego, el nuevo score del usuario
+     * @param scoregame 
+     */
+     private void escribir2(TreeMap<Dificultad,TreeSet<Score>> scoregame){
+        scoregame.get(pd.getDf()).add(pd.getPlayer_score()); 
+        try(ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream("src/data/scores.dat"))){
+            oos.writeObject(scoregame);
+        } catch (FileNotFoundException ex) {
+            showTrabajando();
+        } catch (IOException ex) {
+            showTrabajando();
+        }
+    }
+     
+     
+    private void showTrabajando() {
         Alert alert = new Alert(AlertType.INFORMATION);
         alert.setTitle("WOOPS!");
         alert.setContentText("Dificultades tecnicas, estamos trabajando en ello");
         alert.showAndWait();
     }
-     
-     public TreeMap<Dificultad,TreeSet<Score>> LeerArchivo(Score f) throws FileNotFoundException{
-            try(ObjectInputStream ois = new ObjectInputStream(new FileInputStream("src/data/scores.dat"))){
-            TreeMap<Dificultad,TreeSet<Score>> scoresG = (TreeMap<Dificultad,TreeSet<Score>>)ois.readObject();
-            Dificultad df= (Dificultad) f.getDf(); 
-            if(scoresG.containsKey(df)){
-            scoresG.get(df).add(f); 
-            }else{
-            TreeSet<Score> scorep= new TreeSet();
-             scorep.add(f); 
-             scoresG.put(df, scorep); 
-            return scoresG;
-            }
-            }catch (IOException ex) {
-            Logger.getLogger(VistaJuego2.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (ClassNotFoundException ex) {
-            Logger.getLogger(VistaJuego2.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        return null;
-     }
-     
-     
 }
   
