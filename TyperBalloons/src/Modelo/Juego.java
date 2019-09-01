@@ -22,6 +22,12 @@ public class Juego {
     private HashMap<String, Integer> game_words;
     private HashMap<String,Integer> player_l;
     private Score player_score;
+    private Dificultad df; 
+
+    public Dificultad getDf() {
+        return df;
+    }
+    
     private TreeMap<Dificultad,TreeSet<Score>> scoresF; 
 
     
