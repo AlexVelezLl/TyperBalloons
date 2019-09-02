@@ -56,7 +56,8 @@ public class VistaJuego1 {
     Juego juego;
     Pane root;
     Pane Gpane;
-    Pane onRoot;    
+    Pane onRoot;
+    Pane pMessage;
     Label tiempo;
     int tiempoJuego;
     Label Globos;
@@ -86,7 +87,7 @@ public class VistaJuego1 {
     public Pane CrearElementos(){
         onRoot= new Pane();
         Gpane= new Pane();
-        
+        pMessage = new Pane();
         
         Font theFont = Font.font("Aharoni", FontWeight.BOLD, 20 );
         Pane root = new Pane();
@@ -147,16 +148,16 @@ public class VistaJuego1 {
         
         Button b = new Button();
         b.setLayoutY(100);
-        root.getChildren().addAll(new Button(),b,imv,htiempo,marcador,Gpane,onRoot);
+        root.getChildren().addAll(new Button(),b,imv,htiempo,Gpane,onRoot,marcador,pMessage);
         root.setOnKeyPressed((e)->{
             String letra = e.getText();
             
-            System.out.println(e.getCode());
+            //System.out.println(e.getCode());
             Iterator <Globo> iterator = globoslista.iterator();
             while(iterator.hasNext()){
                 Globo g = iterator.next();
                 if(g.getLetras().contains(letra) && g.onScreen){
-                    System.out.println(g.getClass().getName());
+                    //System.out.println(g.getClass().getName());
                     Platform.runLater(()->{
                                 onRoot.getChildren().clear();
                             });
@@ -207,17 +208,30 @@ public class VistaJuego1 {
                     }
                     numeroGlobos += 1;
                     Globos.setText(String.valueOf(numeroGlobos));            
-        }
-                if (gb instanceof GloboMalo) {                                                          
+                }
+                if (gb instanceof GloboMalo) {
+                            
                             Globos.setText(String.valueOf(numeroGlobos)); 
                             Label whoops = new Label("Woops, globo malo");
                             whoops.setFont(CONSTANTES.FUENTE);
                             whoops.setTextFill(Color.RED);
                             whoops.setLayoutX(200);
                             whoops.setLayoutY(70);
-                            Platform.runLater(()->{
-                                onRoot.getChildren().add(whoops);
+                            Thread tMessage = new Thread(()->{
+                                Platform.runLater(()->{
+                                pMessage.getChildren().add(whoops);
+                                });
+                                try {
+                                    Thread.sleep(1000);
+                                } catch (InterruptedException ex) {
+                                    Logger.getLogger(VistaJuego1.class.getName()).log(Level.SEVERE, null, ex);
+                                }
+                                Platform.runLater(()->{
+                                    pMessage.getChildren().remove(whoops);
+                                });
                             });
+                            tMessage.start();
+                            
                 }
      }
      
@@ -236,7 +250,7 @@ public class VistaJuego1 {
             Label ltitulo = new Label("TIME'S OVER");
             ltitulo.setTextFill(Color.WHITE);
             ltitulo.setFont(CONSTANTES.FUENTE);            
-            Pane Seguir = Utilities.boton("Seguir_Button");
+            Pane Seguir = Utilities.boton("Seguir");
             Seguir.setLayoutX(500);
             Seguir.setLayoutY(290); 
             Seguir.setOnMouseClicked((e)->{

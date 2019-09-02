@@ -61,7 +61,7 @@ public abstract class Globo extends Pane {
      */
     public static String generarLetra(){
         Random r= new Random();
-        String alphabet = "abcd";
+        String alphabet = "abcdefghijklmnñopqrstuvwxyz";
         char a =alphabet.charAt(r.nextInt(alphabet.length()));
         String f = String.valueOf(a);
         return f;

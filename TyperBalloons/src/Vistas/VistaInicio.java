@@ -11,9 +11,11 @@ import Modelo.Score;
 import controlador.Controlador;
 import java.awt.Desktop;
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import utilities.*;
 import java.io.IOException;
 import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Iterator;
@@ -53,7 +55,7 @@ public class VistaInicio{
      * la Vista Inicial.
      */
     public VistaInicio(){
-        
+   
         root = new Pane();
         onRoot = new Pane();
         Controlador.setbGIndex(new ImageView());
@@ -63,6 +65,7 @@ public class VistaInicio{
         Controlador.setSondEsp(true);
         root.getChildren().addAll(Controlador.getbGIndex(),includeTitle(),includeButtons(),includeSN(),includeSettings(),onRoot);
     }
+    
     /**
      * Metodo get que retorna el contenedor principal de la VistaInicio
      * @return Pane que contiene el root actual de la vista
@@ -115,7 +118,15 @@ public class VistaInicio{
     private Pane includeTitle(){
         Pane pTitle = new Pane();
         Controlador.setTitle(new ImageView(new Image(CONSTANTES.RUTA_IMGS+"TyperBallons_Title04.png")));
-        
+        Controlador.getTitle().setOnMouseClicked(e->{
+            Desktop enlace=Desktop.getDesktop();
+            String link = "https://typerballoons.000webhostapp.com";
+            try {
+                enlace.browse(new URI(link));
+            } catch (IOException|URISyntaxException ex) {
+                ex.getMessage();
+            }
+        });
         
         
         Controlador.getTitle().setLayoutX(70);
@@ -123,6 +134,7 @@ public class VistaInicio{
         pTitle.getChildren().add(Controlador.getTitle());
         return pTitle;
     }
+    
     /**
      * Metodo donde se construye y retorna el contenedor donde estaran ubicados 
      * los respectivos botones de nuestras redes Sociales.
@@ -409,7 +421,18 @@ public class VistaInicio{
                 hBDif.getChildren().add(pDifi);
             }
         }catch(Exception ex){
-            ex.printStackTrace();
+            
+            Label a = new Label("No existen puntajes aun.");
+            a.setFont(CONSTANTES.FUENTE2);
+            a.setTextFill(Color.WHITE);
+            hBDif.getChildren().add(a);
+            TreeMap<Dificultad,Set<Score>> tr = new TreeMap<>();
+            try(ObjectOutputStream ob = new ObjectOutputStream(new FileOutputStream("src/data/scores.dat"))){
+                ob.writeObject(tr);
+            }catch(Exception ex1){
+                System.out.println(ex1);
+            }
+            
         }
         vBPuntajes.getChildren().addAll(lPuntajes,hBDif);
         vBPuntajes.setAlignment(Pos.CENTER);

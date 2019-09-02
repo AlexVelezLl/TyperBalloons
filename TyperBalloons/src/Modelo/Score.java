@@ -26,7 +26,7 @@ public class Score implements Comparable<Score>,Serializable{
         
     }
 
-    Score(String nombre, int i) {
+    public Score(String nombre, int i) {
         this.nombre=nombre;
         puntaje=i;//To change body of generated methods, choose Tools | Templates.
     }
