@@ -34,6 +34,7 @@ public class Juego {
     public Juego(){
         scoresF = new TreeMap(); 
         game_words= cargarPalabras();
+        player_l = new HashMap();
         
     }
 

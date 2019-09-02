@@ -30,8 +30,8 @@ public class GloboRojo extends Globo {
         
         Image img = new Image(getClass().getResourceAsStream(
                         CONSTANTES.RUTA_IMGS+"Globo_Rojo.png"),
-                                150,
-                                250,
+                                170,
+                                270,
                                 true,
                                 true);
         
@@ -41,7 +41,7 @@ public class GloboRojo extends Globo {
             letras.add(s);
         }
         
-        añadirLetras(letras);
+        añadirLetras(letras,22,20);
      
         globorojo = new ImageView(img);
         

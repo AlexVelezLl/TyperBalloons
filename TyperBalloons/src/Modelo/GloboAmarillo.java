@@ -30,14 +30,14 @@ public class GloboAmarillo extends Globo{
         letralabel= new Label();
         Image img = new Image(getClass().getResourceAsStream(
                         CONSTANTES.RUTA_IMGS+"Globo_Amarillo.png"),
-                                150,
-                                250,
+                                170,
+                                270,
                                 true,
                                 true);
         globoamarillo= new ImageView(img);
         String s = Globo.generarLetra().toUpperCase();
         letras.add(s);
-        añadirLetras(letras);        
+        añadirLetras(letras,25,20);        
         this.getChildren().addAll(globoamarillo,letralabel);  
 }
 

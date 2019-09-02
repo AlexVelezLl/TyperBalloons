@@ -62,13 +62,13 @@ public class VistaJuego1 {
     int numeroGlobos;
     private Random random=new Random();
     ImageView i;
-    public static ArrayList <Globo> globos;
+    public static ArrayList <Globo> globos;    
     public HashMap<String,Integer> letrasObtenidas;
-    
+    public Thread mov;
     public VistaJuego1(Dificultad f){
         juego= new Juego();
         letrasObtenidas= juego.getPlayer_l();
-        globos = new ArrayList<>();
+        globos = new ArrayList<>();    
         tiempoJuego=60;
         root = CrearElementos();
         iniciarJuego(f);
@@ -160,26 +160,20 @@ public class VistaJuego1 {
                     
                         JuegoGlobos(g,letra);
                         if (letrasObtenidas.keySet().contains(letra)) {
-                            int cont= letrasObtenidas.get(letra)+1;
-                            letrasObtenidas.put(letra, cont);
-                        
-                    }else{
-                            letrasObtenidas.put(letra, 1);
+                                    int cont= letrasObtenidas.get(letra)+1;
+                                    letrasObtenidas.put(letra, cont);
+                                    if (g instanceof GloboMalo) {
+                                        letrasObtenidas.put(letra,0);
+                                    }
+                        }else{
+                                    letrasObtenidas.put(letra, 1);
+                                    if (g instanceof GloboMalo) {
+                                        letrasObtenidas.put(letra,0);
+                                    }
                         }
                         
-                        if ((g instanceof GloboMalo)&& !(globos.isEmpty())) {
-                            globos.remove(globos.size()-1);
-                            globos.remove(globos.size()-1);
-                            Label whoops = new Label("Whoops, globo malo");
-                            whoops.setFont(CONSTANTES.FUENTE);
-                            whoops.setTextFill(Color.RED);
-                            whoops.setLayoutX(200);
-                            whoops.setLayoutY(50);
-                            Platform.runLater(()->{
-                                onRoot.getChildren().add(whoops);
-                            });
-  
-                    }
+                        
+                        
       
                 }
                 
@@ -201,37 +195,42 @@ public class VistaJuego1 {
                 while(it.hasNext()){
                     if (it.next().equals(s)) {
                         it.remove();
-                        gb.añadirLetras(gb.getLetras());
+                        gb.añadirLetras(gb.getLetras(),22,20);
                     }
                 }
                 if (gb.getLetras().isEmpty()) {
                     root.getChildren().remove(gb);
-                    gb.onScreen=false;
-                        if(Controlador.isSondEsp()){
-                            
-                            MediaPlayer mp = new MediaPlayer(music);
-                            mp.play();
-                        }
-                        numeroGlobos += 1;
-                        Globos.setText(String.valueOf(numeroGlobos));            
+                    gb.onScreen=false;                   
+                    if(Controlador.isSondEsp()){
+
+                        MediaPlayer mp = new MediaPlayer(music);
+                        mp.play();
+                    }
+                    numeroGlobos += 1;
+                    Globos.setText(String.valueOf(numeroGlobos));            
         }
-                
-         
-                
-    }
+                if (gb instanceof GloboMalo) {                              
+                            numeroGlobos -= 2;
+                            Globos.setText(String.valueOf(numeroGlobos)); 
+                            Label whoops = new Label("Whoops, globo malo");
+                            whoops.setFont(CONSTANTES.FUENTE);
+                            whoops.setTextFill(Color.RED);
+                            whoops.setLayoutX(200);
+                            whoops.setLayoutY(70);
+                            Platform.runLater(()->{
+                                onRoot.getChildren().add(whoops);
+                            });
+                }
+     }
      
      /**
       * Metodo que desactiva la accion OnKeyPressed sobre el globo y presenta los resultados de la primera etapa
       */
     
-    public void FinalizarJuego(){   
-        Iterator <Globo> iterator = globos.iterator();
-            while(iterator.hasNext()){
-                Globo g = iterator.next();
-                g.onScreen=false;
-                
-            }
-                
+    public void FinalizarJuego(){
+        EliminarLetrasAusentes();
+        System.out.println(letrasObtenidas);
+        DeshabilitarGlobos();      
         Platform.runLater(()->{
             onRoot.getChildren().clear();
             Pane Over = new Pane();
@@ -344,8 +343,8 @@ public class VistaJuego1 {
         globos.add(globor);
         root.getChildren().addAll(globor);        
         MoverGlobo mv = new MoverGlobo(globor);
-        Thread th= new Thread(mv);
-        th.start();    
+        mov= new Thread(mv);
+        mov.start();    
     };
     
     /**
@@ -359,8 +358,8 @@ public class VistaJuego1 {
            
         root.getChildren().addAll(globov);
         MoverGlobo mv = new MoverGlobo(globov);
-        Thread th= new Thread(mv);
-        th.start();          
+        mov= new Thread(mv);
+        mov.start();          
     };
     
     
@@ -374,8 +373,8 @@ public class VistaJuego1 {
         globoa.fijarPosicion(posicionx);
         root.getChildren().addAll(globoa);
         MoverGlobo mv = new MoverGlobo(globoa);
-        Thread th= new Thread(mv);
-        th.start();   
+        mov= new Thread(mv);
+        mov.start();   
     }
     
     /**
@@ -388,8 +387,8 @@ public class VistaJuego1 {
         globom.fijarPosicion(posicionx);
         root.getChildren().addAll(globom);
         MoverGlobo mv = new MoverGlobo(globom);
-        Thread th= new Thread(mv);
-        th.start();
+        mov= new Thread(mv);
+        mov.start();
     }
     private class HiloCrearGlobosMalos implements Runnable{
         @Override
@@ -524,9 +523,16 @@ public class VistaJuego1 {
      */
     public void iniciarJuego(Dificultad d){
         switch(d){
-            case FACIL:                             
+            case FACIL: 
+                
                 Thread thfacil = new Thread(new HiloCrearGlobosFacil());                                
-                thfacil.start();               
+                thfacil.start(); 
+        {
+            try {
+                thfacil.sleep(5000);
+            } catch (InterruptedException ex) {
+                System.out.println(ex.getMessage());            }
+        }
                 
                 break;
             case MEDIO:
@@ -544,7 +550,28 @@ public class VistaJuego1 {
                 break;
         }
         
+                    
         
+        
+    }
+    
+    public void EliminarLetrasAusentes(){        
+        Iterator it = letrasObtenidas.keySet().iterator();
+        while(it.hasNext()){
+            if (letrasObtenidas.get(it.next())==0) {
+                it.remove();
+            }
+            
+        }
+    }
+    
+    public void DeshabilitarGlobos(){
+        Iterator <Globo> iterator = globos.iterator();
+            while(iterator.hasNext()){
+                Globo g = iterator.next();
+                g.onScreen=false;
+                
+            }
     }
     
    

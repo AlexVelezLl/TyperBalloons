@@ -27,13 +27,13 @@ public class GloboVerde extends Globo {
         letralabel= new Label();
         Image img = new Image(getClass().getResourceAsStream(
                         CONSTANTES.RUTA_IMGS+"Globo_Verde.png"),
-                                150,
-                                250,
+                                170,
+                                270,
                                 true,
                                 true);
         String s = Globo.generarLetra();
         letras.add(s);
-        añadirLetras(letras);
+        añadirLetras(letras,25,20);
         globoverde = new ImageView(img);        
         this.getChildren().addAll(globoverde,letralabel);
     }

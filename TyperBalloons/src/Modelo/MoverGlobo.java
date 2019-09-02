@@ -14,6 +14,10 @@ import javafx.application.Platform;
  */
 public class MoverGlobo implements Runnable {
     Globo globo;
+    
+    public MoverGlobo(){
+        
+    }
 
     public MoverGlobo(Globo globo){
         this.globo=globo;
@@ -21,7 +25,7 @@ public class MoverGlobo implements Runnable {
 
     @Override
     public void run() {
-        for (int i=0;i<850;i++){
+        for (int i=0;i<875;i++){
         Platform.runLater(()->{
             globo.setLayoutY(globo.getPosicionY()-1);
             });

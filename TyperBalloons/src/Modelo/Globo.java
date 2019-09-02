@@ -71,7 +71,7 @@ public abstract class Globo extends Pane {
      * Metodo que establece el label del globo con un arreglo de letras
      * @param array Letras a ingresar en el globo
      */
-    public void añadirLetras(ArrayList<String> array){
+    public void añadirLetras(ArrayList<String> array, double x, double y){
          String p="";
         for(String s: array){
              p+=s;
@@ -81,8 +81,8 @@ public abstract class Globo extends Pane {
                 "Helvetica", FontWeight.BOLD, 28);        
         letralabel.setFont(theFont);
         letralabel.setTextFill(Color.web("#FFFFFF"));
-        letralabel.setLayoutY(15);
-        letralabel.setLayoutX(24);
+        letralabel.setLayoutY(y);
+        letralabel.setLayoutX(x);
     }
     
     /**
