@@ -20,5 +20,9 @@ public final class CONSTANTES {
     public static final double HEIGHT =600;
     public static final Font FUENTE = Font.font("Arial", FontWeight.BOLD, 45 );
     public static final Font FUENTE2 = Font.font("Comic Sans MS",FontWeight.BOLD,30);
+    public static final String GameData= "src/data/scores.dat";
+    public static final Font FUENTEJ= Font.font("Helvetica", FontWeight.BOLD,24);
+    public static final Font FUENTEJ2= Font.font("Helvetica", FontWeight.BOLD,32);
+
     private CONSTANTES(){}
 }
