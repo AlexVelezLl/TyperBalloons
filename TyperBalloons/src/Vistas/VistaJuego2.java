@@ -244,7 +244,7 @@ public class VistaJuego2 {
     private class HiloTiempo implements Runnable{
         @Override
         public void run() {
-            while(!terminarJuego&&tiempoTranscurrido<10){
+            while(!terminarJuego&&tiempoTranscurrido<30){
                 tiempoTranscurrido+=1;
                 Platform.runLater(()->{
                     tiempo.setText(String.valueOf(tiempoTranscurrido)); 
@@ -287,7 +287,7 @@ public class VistaJuego2 {
                 buttons.getChildren().addAll(shareScore,continuar); 
                 vf.setSpacing(20);
                 buttons.setSpacing(20);
-                
+              
                 buttons.setPadding(new Insets(30, 30, 30, 30));  
 
                 vf.getChildren().addAll(ltitulo,puntuacion,finished,userInfo,buttons);

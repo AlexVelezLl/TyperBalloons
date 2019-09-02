@@ -14,13 +14,14 @@ import javafx.application.Platform;
  */
 public class MoverGlobo implements Runnable {
     Globo globo;
-    
+    private int tiempo;
     public MoverGlobo(){
         
     }
 
-    public MoverGlobo(Globo globo){
+    public MoverGlobo(Globo globo, int tiempo){
         this.globo=globo;
+        this.tiempo=tiempo;
     }
 
     @Override
@@ -30,7 +31,7 @@ public class MoverGlobo implements Runnable {
             globo.setLayoutY(globo.getPosicionY()-1);
             });
                 try {
-                    Thread.sleep(10);
+                    Thread.sleep(tiempo);
                 } catch (InterruptedException ex) {
                     System.out.println("Ocurrio un error");
                 }

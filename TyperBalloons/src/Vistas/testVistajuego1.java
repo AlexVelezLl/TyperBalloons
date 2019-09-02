@@ -21,12 +21,13 @@ import javafx.stage.Stage;
  * @author PC
  */
 public class testVistajuego1 extends Application {
-    VistaJuego1 Juego;
+    VistaJuego2 Juego;
 
     @Override
     public void start(Stage primaryStage) throws Exception {
         Controlador.setSkin(1);
-        Juego = new VistaJuego1(Dificultad.FACIL);  
+        Juego jg= new Juego();
+        Juego = new VistaJuego2(jg);  
         Pane root = Juego.getRoot();
         Scene sc = new Scene(root);
         primaryStage.setHeight(CONSTANTES.HEIGHT);

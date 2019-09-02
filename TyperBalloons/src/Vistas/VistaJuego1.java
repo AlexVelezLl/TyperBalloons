@@ -55,6 +55,7 @@ import utilities.Utilities;
 public class VistaJuego1 {
     Juego juego;
     Pane root;
+    Pane Gpane;
     Pane onRoot;    
     Label tiempo;
     int tiempoJuego;
@@ -62,13 +63,14 @@ public class VistaJuego1 {
     int numeroGlobos;
     private Random random=new Random();
     ImageView i;
-    public static ArrayList <Globo> globos;    
+    public  ArrayList <Globo> globoslista;
+    
     public HashMap<String,Integer> letrasObtenidas;
     public Thread mov;
     public VistaJuego1(Dificultad f){
         juego= new Juego();
         letrasObtenidas= juego.getPlayer_l();
-        globos = new ArrayList<>();    
+        globoslista = new ArrayList<>();    
         tiempoJuego=60;
         root = CrearElementos();
         iniciarJuego(f);
@@ -83,6 +85,7 @@ public class VistaJuego1 {
     
     public Pane CrearElementos(){
         onRoot= new Pane();
+        Gpane= new Pane();
         
         
         Font theFont = Font.font("Aharoni", FontWeight.BOLD, 20 );
@@ -144,12 +147,12 @@ public class VistaJuego1 {
         
         Button b = new Button();
         b.setLayoutY(100);
-        root.getChildren().addAll(new Button(),b,imv,htiempo,marcador,onRoot);
+        root.getChildren().addAll(new Button(),b,imv,htiempo,marcador,Gpane,onRoot);
         root.setOnKeyPressed((e)->{
             String letra = e.getText();
             
             System.out.println(e.getCode());
-            Iterator <Globo> iterator = globos.iterator();
+            Iterator <Globo> iterator = globoslista.iterator();
             while(iterator.hasNext()){
                 Globo g = iterator.next();
                 if(g.getLetras().contains(letra) && g.onScreen){
@@ -159,22 +162,18 @@ public class VistaJuego1 {
                             });
                     
                         JuegoGlobos(g,letra);
-                        if (letrasObtenidas.keySet().contains(letra)) {
-                                    int cont= letrasObtenidas.get(letra)+1;
-                                    letrasObtenidas.put(letra, cont);
+                        if (letrasObtenidas.keySet().contains(letra.toLowerCase())) {
+                                    int cont= letrasObtenidas.get(letra.toLowerCase())+1;
+                                    letrasObtenidas.put(letra.toLowerCase(), cont);
                                     if (g instanceof GloboMalo) {
-                                        letrasObtenidas.put(letra,0);
+                                        letrasObtenidas.put(letra.toLowerCase(),0);
                                     }
                         }else{
-                                    letrasObtenidas.put(letra, 1);
+                                    letrasObtenidas.put(letra.toLowerCase(), 1);
                                     if (g instanceof GloboMalo) {
-                                        letrasObtenidas.put(letra,0);
+                                        letrasObtenidas.put(letra.toLowerCase(),0);
                                     }
-                        }
-                        
-                        
-                        
-      
+                        }                                                                              
                 }
                 
             }
@@ -199,7 +198,7 @@ public class VistaJuego1 {
                     }
                 }
                 if (gb.getLetras().isEmpty()) {
-                    root.getChildren().remove(gb);
+                    Gpane.getChildren().remove(gb);
                     gb.onScreen=false;                   
                     if(Controlador.isSondEsp()){
 
@@ -209,10 +208,9 @@ public class VistaJuego1 {
                     numeroGlobos += 1;
                     Globos.setText(String.valueOf(numeroGlobos));            
         }
-                if (gb instanceof GloboMalo) {                              
-                            numeroGlobos -= 2;
+                if (gb instanceof GloboMalo) {                                                          
                             Globos.setText(String.valueOf(numeroGlobos)); 
-                            Label whoops = new Label("Whoops, globo malo");
+                            Label whoops = new Label("Woops, globo malo");
                             whoops.setFont(CONSTANTES.FUENTE);
                             whoops.setTextFill(Color.RED);
                             whoops.setLayoutX(200);
@@ -237,12 +235,14 @@ public class VistaJuego1 {
             ImageView ini = new ImageView(new Image(CONSTANTES.RUTA_IMGS+"BG_IJ02.png"));
             Label ltitulo = new Label("TIME'S OVER");
             ltitulo.setTextFill(Color.WHITE);
-            ltitulo.setFont(CONSTANTES.FUENTE);
-            ImageView seguir = new ImageView(new Image(CONSTANTES.RUTA_IMGS+"seguir.png"));
-            Pane Seguir = new Pane();
-            Seguir.getChildren().add(seguir);
+            ltitulo.setFont(CONSTANTES.FUENTE);            
+            Pane Seguir = Utilities.boton("Seguir_Button");
             Seguir.setLayoutX(500);
-            Seguir.setLayoutY(290);            
+            Seguir.setLayoutY(290); 
+            Seguir.setOnMouseClicked((e)->{
+                VistaJuego2 vj2= new VistaJuego2(juego);
+                Utilities.transition(root,vj2.getRoot());
+            });
             ltitulo.setLayoutX(150);
             ltitulo.setLayoutY(30);
             ScrollPane scrollp= PaneLetrasObtenidas();
@@ -255,7 +255,10 @@ public class VistaJuego1 {
             h.setLayoutY(90);
             Label l1,l2;
             l1= new Label("Letras");
-            l2= new Label ("Stock");                        
+            l2= new Label ("Stock"); 
+            l1.setTextFill(Color.WHITE);
+            l2.setTextFill(Color.WHITE);
+            
             try {
                 Font f = Font.loadFont(new FileInputStream(new File("src/myFonts/Top_p2.ttf")), 24);
                 l1.setFont(f);
@@ -280,26 +283,19 @@ public class VistaJuego1 {
      * @return Scrollpane con la letra y el sotck de cada una
      */
     
-    public ScrollPane PaneLetrasObtenidas(){       
+    public ScrollPane PaneLetrasObtenidas(){  
+        Font theFont = Font.font("Helvetica", FontWeight.BOLD,24);
         ScrollPane scrollp = new ScrollPane();
         VBox playerLetters= new VBox();
         for(String s: letrasObtenidas.keySet()){
             HBox box= new HBox();
             Label letter= new Label(s);
             Label num= new Label(Integer.toString(letrasObtenidas.get(s))); 
-            try {
-            Font play_letter = Font.loadFont(new FileInputStream(new File("src/myFonts/player_letters.ttf")), 50);
-            letter.setFont(play_letter);letter.setTextFill(Color.WHEAT);
-            num.setFont(play_letter); num.setTextFill(Color.WHEAT);
-    
-            } catch (FileNotFoundException ex) {
-                System.out.println(ex.getMessage());
-            }
+            letter.setFont(theFont);
+            num.setFont(theFont);
             box.getChildren().addAll(letter,num);
-            playerLetters.getChildren().add(box);
-            box.setSpacing(90);
-            
-            
+            playerLetters.getChildren().add(box);          
+            box.setSpacing(100);
         }   
         scrollp.setContent(playerLetters);     
         scrollp.setPrefSize(300,180);
@@ -336,13 +332,13 @@ public class VistaJuego1 {
     /**
      * Metodo que crea un objeto GloboRojo, lo situa en la ventana y genera el movimiento del mismo
      */
-    public void CrearGloboRojo(){        
+    public void CrearGloboRojo(int tiempo){        
         GloboRojo globor = new GloboRojo();
         double posicionx = generarPosicionX();
         globor.fijarPosicion(posicionx);
-        globos.add(globor);
-        root.getChildren().addAll(globor);        
-        MoverGlobo mv = new MoverGlobo(globor);
+        globoslista.add(globor);
+        Gpane.getChildren().addAll(globor);        
+        MoverGlobo mv = new MoverGlobo(globor,tiempo);
         mov= new Thread(mv);
         mov.start();    
     };
@@ -350,14 +346,14 @@ public class VistaJuego1 {
     /**
      * Metodo que crea un objeto GloboVerde, lo situa en la ventana y genera el movimiento del mismo
      */
-    public void CrearGloboVerde(){        
+    public void CrearGloboVerde(int tiempo){        
         GloboVerde globov = new GloboVerde();
-        globos.add(globov);
+        globoslista.add(globov);
         double posicionx = generarPosicionX();
         globov.fijarPosicion(posicionx);
            
-        root.getChildren().addAll(globov);
-        MoverGlobo mv = new MoverGlobo(globov);
+        Gpane.getChildren().addAll(globov);
+        MoverGlobo mv = new MoverGlobo(globov,tiempo);
         mov= new Thread(mv);
         mov.start();          
     };
@@ -366,127 +362,109 @@ public class VistaJuego1 {
     /**
      * Metodo que crea un objeto GloboAmarillo, lo situa en la ventana y genera el movimiento del mismo
      */
-    public void CrearGloboAmarillo(){        
+    public void CrearGloboAmarillo(int tiempo){        
         GloboAmarillo globoa = new GloboAmarillo();
-        globos.add(globoa);
+        globoslista.add(globoa);
         double posicionx = generarPosicionX();
         globoa.fijarPosicion(posicionx);
-        root.getChildren().addAll(globoa);
-        MoverGlobo mv = new MoverGlobo(globoa);
+        Gpane.getChildren().addAll(globoa);
+        MoverGlobo mv = new MoverGlobo(globoa,tiempo);
         mov= new Thread(mv);
         mov.start();   
     }
     
+    
+    
     /**
      * Metodo que crea un objeto GloboMalo, lo situa en la ventana y genera el movimiento del mismo
      */
-    public void CrearGloboMalo(){
+    public void CrearGloboMalo(int tiempo){
         GloboMalo globom = new GloboMalo();
-        globos.add(globom); 
+        globoslista.add(globom); 
         double posicionx = generarPosicionX();
         globom.fijarPosicion(posicionx);
-        root.getChildren().addAll(globom);
-        MoverGlobo mv = new MoverGlobo(globom);
+        Gpane.getChildren().addAll(globom);
+        MoverGlobo mv = new MoverGlobo(globom,tiempo);
         mov= new Thread(mv);
         mov.start();
     }
+    
     private class HiloCrearGlobosMalos implements Runnable{
         @Override
         public void run() {
             while(tiempoJuego!=0){
                 Platform.runLater(()->{                                         
-                    CrearGloboMalo();
+                    CrearGloboMalo(7);
                     });
                     try {
                     Thread.sleep(5000);
                 } catch (InterruptedException ex) {
                     System.out.println(ex.getMessage());
-                }
-                
-                
+                }                                
             }
-        }
-        
+        }        
     }
     
     /**
      * Hilo que crea varios globos al mismo tiempo según las especificaiciones del nivel FACIL
      */
          
-    private class HiloCrearGlobosFacil implements Runnable{
-        
-
+    private class HiloCrearGlobosFacil implements Runnable{        
         @Override
         public void run() {
             while(tiempoJuego!=0){
                 Platform.runLater(()->{                     
-                    CrearGloboVerde();
-                    CrearGloboAmarillo();
+                    CrearGloboVerde(10);
+                    CrearGloboAmarillo(10);
                     });
                     try {
-                    Thread.sleep(1000);
+                    Thread.sleep(2000);
                 } catch (InterruptedException ex) {
                     System.out.println(ex.getMessage());
-                }
-                
-                
+                }                                
             }
-        }
-        
-    }
-    
+        }        
+    }   
     /**
      * Hilo que crea varios globos al mismo tiempo según las especificaiciones del nivel MEDIO
-     */
-         
+     */         
     private class HiloCrearGlobosMedio implements Runnable{
 
         @Override
         public void run() {
             while(tiempoJuego!=0){
                 Platform.runLater(()->{                                         
-                    CrearGloboRojo();
-                    CrearGloboVerde();
-                    CrearGloboAmarillo();
+                    CrearGloboRojo(9);
+                    CrearGloboVerde(9);
+                    CrearGloboAmarillo(9);
                     });
                     try {
-                    Thread.sleep(1000);
+                    Thread.sleep(2000);
                 } catch (InterruptedException ex) {
                     System.out.println(ex.getMessage());
-                }
-                
-                
+                }                                
             }
-        }
-        
-    }
-    
-    
-    
+        }        
+    }    
     /**
      * Hilo que crea varios globos al mismo tiempo según las especificaiciones del nivel DIFICIL
-     */
-         
+     */         
     private class HiloCrearGlobosDificil implements Runnable{
-
         @Override
         public void run() {
             while(tiempoJuego!=0){
                 Platform.runLater(()->{                     
-                    CrearGloboVerde();
-                    CrearGloboAmarillo();
-                    
+                    CrearGloboVerde(7);
+                    CrearGloboAmarillo(7);
+                    CrearGloboRojo(7);                    
                     });
                     try {
-                    Thread.sleep(1000);
+                    Thread.sleep(2000);
                 } catch (InterruptedException ex) {
                     System.out.println(ex.getMessage());
-                }
-                
-                
+                }                               
             }
-        }
-        
+        }        
     }
     
     /**
@@ -523,36 +501,21 @@ public class VistaJuego1 {
      */
     public void iniciarJuego(Dificultad d){
         switch(d){
-            case FACIL: 
-                
+            case FACIL:                 
                 Thread thfacil = new Thread(new HiloCrearGlobosFacil());                                
-                thfacil.start(); 
-        {
-            try {
-                thfacil.sleep(5000);
-            } catch (InterruptedException ex) {
-                System.out.println(ex.getMessage());            }
-        }
-                
+                thfacil.start();                                                           
                 break;
             case MEDIO:
                 Thread thmedio = new Thread(new HiloCrearGlobosMedio());                                
-                thmedio.start();  
-                
-                break;
-                
+                thmedio.start();                 
+                break;                
             case DIFICIL:
                 Thread thdif = new Thread(new HiloCrearGlobosDificil()); 
                 Thread gm = new Thread(new HiloCrearGlobosMalos() );
                 gm.start();
-                thdif.start();  
-                
+                thdif.start();                  
                 break;
-        }
-        
-                    
-        
-        
+        }                                           
     }
     
     public void EliminarLetrasAusentes(){        
@@ -566,17 +529,13 @@ public class VistaJuego1 {
     }
     
     public void DeshabilitarGlobos(){
-        Iterator <Globo> iterator = globos.iterator();
+        Iterator <Globo> iterator = globoslista.iterator();
             while(iterator.hasNext()){
                 Globo g = iterator.next();
                 g.onScreen=false;
                 
             }
-    }
-    
-   
-
-
+    }              
     
     
 }
