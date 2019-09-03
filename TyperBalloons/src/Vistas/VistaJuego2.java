@@ -81,6 +81,10 @@ public class VistaJuego2 {
     this.pd=pd;
     }
  
+    /**
+     * Metodo que crea un scrollpane para las letras que tendra el usuario
+     * @return ScrollPane con las letras y el stock del jugador
+     */
     private ScrollPane createSP(){
         ScrollPane sp = new ScrollPane(); //Para facilitar la visualizacion crearemos un scrollpane 
         playerLetters= new VBox(); 
@@ -177,7 +181,6 @@ public class VistaJuego2 {
     /**
      * Inicia el juego para que el usuario pueda dar enter al escribir una palabra
      * @param player_word palabra que ingresa el usuario en text field
-     * @param player_unique set de palabras que ha ingresado el usuario
      * @param l2 Label que indicará al jugador si está ingresando palabras correctas
      */
     public void iniciarJuego(TextField player_word, Label l2){
@@ -325,7 +328,8 @@ public class VistaJuego2 {
             
             }catch (IOException ex) {
                 Logger.getLogger(VistaJuego2.class.getName()).log(Level.SEVERE, null, ex);
-                Utilities.reportError(ex);               
+                escribir1();
+                        
             }catch (ClassNotFoundException ex){
              Logger.getLogger(VistaJuego2.class.getName()).log(Level.SEVERE, null, ex);
              Utilities.reportError(ex);   
