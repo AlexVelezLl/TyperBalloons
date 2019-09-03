@@ -57,7 +57,7 @@ public class VistaJuego1 {
     Pane onRoot;
     Pane pMessage;
     Label tiempo;
-    int tiempoJuego;
+    static int tiempoJuego;
     Label Globos;
     int numeroGlobos;
     private Random random=new Random();
@@ -334,7 +334,7 @@ public class VistaJuego1 {
         globor.fijarPosicion(posicionx);
         globoslista.add(globor);
         Gpane.getChildren().addAll(globor);        
-        MoverGlobo mv = new MoverGlobo(globor,tiempo,tiempoJuego);
+        MoverGlobo mv = new MoverGlobo(globor,tiempo);
         mov= new Thread(mv);
         mov.start();    
     }
@@ -349,7 +349,7 @@ public class VistaJuego1 {
         globov.fijarPosicion(posicionx);
            
         Gpane.getChildren().addAll(globov);
-        MoverGlobo mv = new MoverGlobo(globov,tiempo,tiempoJuego);
+        MoverGlobo mv = new MoverGlobo(globov,tiempo);
         mov= new Thread(mv);
         mov.start();          
     }
@@ -364,7 +364,7 @@ public class VistaJuego1 {
         double posicionx = generarPosicionX();
         globoa.fijarPosicion(posicionx);
         Gpane.getChildren().addAll(globoa);
-        MoverGlobo mv = new MoverGlobo(globoa,tiempo,tiempoJuego);
+        MoverGlobo mv = new MoverGlobo(globoa,tiempo);
         mov= new Thread(mv);
         mov.start();   
     }
@@ -380,7 +380,7 @@ public class VistaJuego1 {
         double posicionx = generarPosicionX();
         globom.fijarPosicion(posicionx);
         Gpane.getChildren().addAll(globom);
-        MoverGlobo mv = new MoverGlobo(globom,tiempo,tiempoJuego);
+        MoverGlobo mv = new MoverGlobo(globom,tiempo);
         mov= new Thread(mv);
         mov.start();
     }
@@ -538,7 +538,7 @@ public class VistaJuego1 {
     }    
     
     public static void finalizarJuego1(){
-        int tiempoJuego=0;
+        tiempoJuego=0;        
     }
     
     

@@ -33,6 +33,8 @@ public class GloboAmarillo extends Globo{
         globoamarilloim= new ImageView(img);
         String s = Globo.generarLetra().toUpperCase();
         letras.add(s);
+        añadirLetras(letras,22,20);
+        
         this.getChildren().addAll(globoamarilloim,letralabel);  
 }
 

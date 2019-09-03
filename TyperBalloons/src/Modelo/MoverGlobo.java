@@ -15,20 +15,18 @@ import javafx.application.Platform;
 public class MoverGlobo implements Runnable {
     Globo globo;
     private int tiempo;
-    int tiempojuego;
     public MoverGlobo(){
         
     }
 
-    public MoverGlobo(Globo globo, int tiempo,int tiempojuego){
+    public MoverGlobo(Globo globo, int tiempo){
         this.globo=globo;
-        this.tiempo=tiempo;
-        this.tiempojuego=tiempojuego;
+        this.tiempo=tiempo;       
     }
 
     @Override
     public void run() {
-        do{
+        
             for (int i=0;i<875;i++){
         Platform.runLater(()->{
             globo.setLayoutY(globo.getPosicionY()-1);
@@ -41,7 +39,7 @@ public class MoverGlobo implements Runnable {
         }
             globo.onScreen=false;
             
-        }while(tiempojuego!=0);
+        
         
         
         

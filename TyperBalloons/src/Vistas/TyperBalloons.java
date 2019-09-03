@@ -65,7 +65,13 @@ public class TyperBalloons extends Application {
             alert.showAndWait();
         }
         
+   
+        
     }
+     @Override
+         public void stop(){
+            VistaJuego1.finalizarJuego1();
+        }
 
     /**
      * Metodo principal de la aplicacion
