@@ -9,11 +9,7 @@ import utilities.CONSTANTES;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.control.Label;
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
-import javafx.scene.text.Font;
-import javafx.scene.text.FontWeight;
 
 /**
  *
@@ -21,24 +17,23 @@ import javafx.scene.text.FontWeight;
  */
 public class GloboAmarillo extends Globo{
     
-    private final ImageView globoamarillo;
+    private final ImageView globoamarilloim;
     
    /**
     * Constructor del globo amarillo que setea la imagen definida para este globo y añade las letras creadas
     */
     public GloboAmarillo(){ 
-        letralabel= new Label();
+        letralabel = new Label();
         Image img = new Image(getClass().getResourceAsStream(
                         CONSTANTES.RUTA_IMGS+"Globo_Amarillo.png"),
                                 170,
                                 270,
                                 true,
                                 true);
-        globoamarillo= new ImageView(img);
+        globoamarilloim= new ImageView(img);
         String s = Globo.generarLetra().toUpperCase();
         letras.add(s);
-        añadirLetras(letras,25,20);        
-        this.getChildren().addAll(globoamarillo,letralabel);  
+        this.getChildren().addAll(globoamarilloim,letralabel);  
 }
 
     

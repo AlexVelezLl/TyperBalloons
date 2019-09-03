@@ -33,7 +33,7 @@ public class MoverGlobo implements Runnable {
                 try {
                     Thread.sleep(tiempo);
                 } catch (InterruptedException ex) {
-                    System.out.println("Ocurrio un error");
+                    Thread.currentThread().interrupt();
                 }
         }
         globo.onScreen=false;

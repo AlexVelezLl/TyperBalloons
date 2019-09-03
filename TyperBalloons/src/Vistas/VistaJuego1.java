@@ -21,7 +21,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import utilities.CONSTANTES;
-import javafx.geometry.Point2D;
 import javafx.scene.layout.Pane;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -30,12 +29,10 @@ import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.application.Platform;
-import javafx.event.EventType;
 import javafx.geometry.Insets;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
-import javafx.scene.input.KeyCode;
 import javafx.scene.layout.HBox;
 import static javafx.scene.layout.Region.USE_COMPUTED_SIZE;
 import javafx.scene.layout.VBox;
@@ -53,6 +50,7 @@ import utilities.Utilities;
 
 
 public class VistaJuego1 {
+    Font theFont = Font.font("Aharoni", FontWeight.BOLD, 20 );
     Juego juego;
     Pane root;
     Pane Gpane;
@@ -64,10 +62,10 @@ public class VistaJuego1 {
     int numeroGlobos;
     private Random random=new Random();
     ImageView i;
-    public  ArrayList <Globo> globoslista;
+    protected ArrayList <Globo> globoslista;   
+    protected HashMap<String,Integer> letrasObtenidas;
+    protected Thread mov;
     
-    public HashMap<String,Integer> letrasObtenidas;
-    public Thread mov;
     public VistaJuego1(Dificultad f){
         juego= new Juego();
         letrasObtenidas= juego.getPlayer_l();
@@ -75,8 +73,7 @@ public class VistaJuego1 {
         tiempoJuego=60;
         root = CrearElementos();
         iniciarJuego(f);
-        Thread cuentareg= new Thread(new HiloTiempo());
-        cuentareg.start();        
+               
         
     }
     /**
@@ -87,42 +84,14 @@ public class VistaJuego1 {
     public Pane CrearElementos(){
         onRoot= new Pane();
         Gpane= new Pane();
-        pMessage = new Pane();
-        
-        Font theFont = Font.font("Aharoni", FontWeight.BOLD, 20 );
-        Pane root = new Pane();
+        pMessage = new Pane();              
+        Pane raiz = new Pane();
         ImageView imv=null;
-        switch (Controlador.getSkin()){
-            case 1:
-                imv = new ImageView(new Image(CONSTANTES.RUTA_IMGS+"BG_02.png"));
-                break;
-            case 2:
-                imv = new ImageView(new Image(CONSTANTES.RUTA_IMGS+"BG_04.png"));
-        }        
-        
-        Image im_tiemp = new Image(getClass().getResourceAsStream(
-                        CONSTANTES.RUTA_IMGS+"TextBox.png"),
-                                100,
-                                200,
-                                true,
-                                true); 
-        ImageView imv_tiemp= new ImageView(im_tiemp);
-        
-        
-        Label l2= new Label("Tiempo transcurrido: ");
-        l2.setFont(theFont);
-        StackPane  t = new StackPane();       
-        tiempo = new Label(String.valueOf(tiempoJuego));
-        tiempo.setFont(theFont);
-        tiempo.setLayoutX(20);
-        tiempo.setLayoutY(20);;
-        t.getChildren().addAll(imv_tiemp,tiempo);
-        HBox htiempo= new HBox();
-        htiempo.setSpacing(20);
-        htiempo.getChildren().addAll(l2,t);
-        htiempo.setLayoutX(40);
-        htiempo.setLayoutY(40);
-        htiempo.setMaxWidth(400);
+        if (Controlador.getSkin()==1) {
+            imv = new ImageView(new Image(CONSTANTES.RUTA_IMGS+"BG_02.png"));
+        }else{
+            imv = new ImageView(new Image(CONSTANTES.RUTA_IMGS+"BG_04.png"));
+        }                              
         
         Label lg = new Label("Numero de \n Globos:");
         
@@ -148,41 +117,59 @@ public class VistaJuego1 {
         
         Button b = new Button();
         b.setLayoutY(100);
-        root.getChildren().addAll(new Button(),b,imv,htiempo,Gpane,onRoot,marcador,pMessage);
-        root.setOnKeyPressed((e)->{
-            String letra = e.getText();
-            
-            //System.out.println(e.getCode());
+        HBox tiempocontenedor= ContenedorTiempo();
+        raiz.getChildren().addAll(new Button(),b,imv,tiempocontenedor,Gpane,onRoot,marcador,pMessage);
+        raiz.setOnKeyPressed(e->{
+            String letra = e.getText();                      
             Iterator <Globo> iterator = globoslista.iterator();
             while(iterator.hasNext()){
                 Globo g = iterator.next();
-                if(g.getLetras().contains(letra) && g.onScreen){
-                    //System.out.println(g.getClass().getName());
+                if(g.getLetras().contains(letra) && g.onScreen){                  
                     Platform.runLater(()->{
-                                onRoot.getChildren().clear();
-                            });
-                    
-                        JuegoGlobos(g,letra);
-                        if (letrasObtenidas.keySet().contains(letra.toLowerCase())) {
-                                    int cont= letrasObtenidas.get(letra.toLowerCase())+1;
-                                    letrasObtenidas.put(letra.toLowerCase(), cont);
-                                    if (g instanceof GloboMalo) {
-                                        letrasObtenidas.put(letra.toLowerCase(),0);
-                                    }
-                        }else{
-                                    letrasObtenidas.put(letra.toLowerCase(), 1);
-                                    if (g instanceof GloboMalo) {
-                                        letrasObtenidas.put(letra.toLowerCase(),0);
-                                    }
-                        }                                                                              
+                        onRoot.getChildren().clear();
+                    });
+                    JuegoGlobos(g,letra);
+                    if (letrasObtenidas.keySet().contains(letra.toLowerCase())) {
+                        int cont= letrasObtenidas.get(letra.toLowerCase())+1;
+                        letrasObtenidas.put(letra.toLowerCase(), cont);
+                        if (g instanceof GloboMalo) {letrasObtenidas.put(letra.toLowerCase(),0);}                        
+                    }else{
+                        letrasObtenidas.put(letra.toLowerCase(), 1);
+                        if (g instanceof GloboMalo){ letrasObtenidas.put(letra.toLowerCase(),0);  }                      
+                    }
                 }
-                
-            }
-            
-            
-        });
-        return root;
+            }});
+        return raiz;
     }
+    
+
+    
+    public HBox ContenedorTiempo(){
+        HBox htiempo= new HBox();
+            Image im_tiemp = new Image(getClass().getResourceAsStream(
+                           CONSTANTES.RUTA_IMGS+"TextBox.png"),
+                                   100,
+                                   200,
+                                   true,
+                                   true); 
+           ImageView imv_tiemp= new ImageView(im_tiemp);                
+           Label l2= new Label("Tiempo transcurrido: ");
+           l2.setFont(theFont);
+           StackPane  t = new StackPane();       
+           tiempo = new Label(String.valueOf(tiempoJuego));
+           tiempo.setFont(theFont);
+           tiempo.setLayoutX(20);
+           tiempo.setLayoutY(20);
+           t.getChildren().addAll(imv_tiemp,tiempo);
+
+           htiempo.setSpacing(20);
+           htiempo.getChildren().addAll(l2,t);
+           htiempo.setLayoutX(40);
+           htiempo.setLayoutY(40);
+           htiempo.setMaxWidth(400);
+        return htiempo;
+    }
+             
     /**
      * Método que realiza la funcion principal del juego, verifica si la letra ingresada coincide con la letra del globo.
      * @param gb El globo sobre el cual se dará la accion de eliminar la letra
@@ -224,7 +211,7 @@ public class VistaJuego1 {
                                 try {
                                     Thread.sleep(1000);
                                 } catch (InterruptedException ex) {
-                                    Logger.getLogger(VistaJuego1.class.getName()).log(Level.SEVERE, null, ex);
+                                    Thread.currentThread().interrupt();
                                 }
                                 Platform.runLater(()->{
                                     pMessage.getChildren().remove(whoops);
@@ -240,8 +227,7 @@ public class VistaJuego1 {
       */
     
     public void FinalizarJuego(){
-        EliminarLetrasAusentes();
-        System.out.println(letrasObtenidas);
+        EliminarLetrasAusentes();   
         DeshabilitarGlobos();      
         Platform.runLater(()->{
             onRoot.getChildren().clear();
@@ -249,11 +235,11 @@ public class VistaJuego1 {
             ImageView ini = new ImageView(new Image(CONSTANTES.RUTA_IMGS+"BG_IJ02.png"));
             Label ltitulo = new Label("TIME'S OVER");
             ltitulo.setTextFill(Color.WHITE);
-            ltitulo.setFont(CONSTANTES.FUENTE);            
+            ltitulo.setFont(CONSTANTES.FUENTE);         
             Pane Seguir = Utilities.boton("Seguir");
             Seguir.setLayoutX(500);
             Seguir.setLayoutY(290); 
-            Seguir.setOnMouseClicked((e)->{
+            Seguir.setOnMouseClicked(e->{
                 VistaJuego2 vj2= new VistaJuego2(juego);
                 Utilities.transition(root,vj2.getRoot());
             });
@@ -267,7 +253,8 @@ public class VistaJuego1 {
             HBox h= new HBox();
             h.setLayoutX(100);
             h.setLayoutY(90);
-            Label l1,l2;
+            Label l1;
+            Label l2;
             l1= new Label("Letras");
             l2= new Label ("Stock"); 
             l1.setTextFill(Color.WHITE);
@@ -278,16 +265,12 @@ public class VistaJuego1 {
                 l1.setFont(f);
                 l2.setFont(f);
             } catch (FileNotFoundException ex) {
-                System.out.println(ex.getMessage());
+                Logger.getLogger(VistaJuego1.class.getName()).log(Level.SEVERE, null, ex);
             }
             h.getChildren().addAll(l1,l2);
             h.setSpacing(60);
-            
             Over.getChildren().addAll(ini,ltitulo,h,scrollp,Seguir);
-            
-            
-            Utilities.bajarCartel(onRoot, Over, 200);
-            System.out.println(letrasObtenidas);
+            Utilities.bajarCartel(onRoot, Over, 200);            
             
         });  
     }
@@ -297,8 +280,7 @@ public class VistaJuego1 {
      * @return Scrollpane con la letra y el sotck de cada una
      */
     
-    public ScrollPane PaneLetrasObtenidas(){  
-        Font theFont = Font.font("Helvetica", FontWeight.BOLD,24);
+    public ScrollPane PaneLetrasObtenidas(){          
         ScrollPane scrollp = new ScrollPane();
         VBox playerLetters= new VBox();
         for(String s: letrasObtenidas.keySet()){
@@ -337,9 +319,8 @@ public class VistaJuego1 {
      * Método de genera una posición random en el eje x
      * @return random double 
      */
-    private double generarPosicionX(){
-        double x = random.nextDouble()*(CONSTANTES.WIDTH-150);
-        return x;
+    private double generarPosicionX(){        
+        return  random.nextDouble()*(CONSTANTES.WIDTH-150);
     }
     
     
@@ -355,7 +336,7 @@ public class VistaJuego1 {
         MoverGlobo mv = new MoverGlobo(globor,tiempo);
         mov= new Thread(mv);
         mov.start();    
-    };
+    }
     
     /**
      * Metodo que crea un objeto GloboVerde, lo situa en la ventana y genera el movimiento del mismo
@@ -370,7 +351,7 @@ public class VistaJuego1 {
         MoverGlobo mv = new MoverGlobo(globov,tiempo);
         mov= new Thread(mv);
         mov.start();          
-    };
+    }
     
     
     /**
@@ -413,7 +394,8 @@ public class VistaJuego1 {
                     try {
                     Thread.sleep(5000);
                 } catch (InterruptedException ex) {
-                    System.out.println(ex.getMessage());
+                     Logger.getLogger(VistaJuego1.class.getName()).log(Level.SEVERE, null, ex);
+                    Thread.currentThread().interrupt();
                 }                                
             }
         }        
@@ -434,7 +416,8 @@ public class VistaJuego1 {
                     try {
                     Thread.sleep(2000);
                 } catch (InterruptedException ex) {
-                    System.out.println(ex.getMessage());
+                    Logger.getLogger(VistaJuego1.class.getName()).log(Level.SEVERE, null, ex);
+                    Thread.currentThread().interrupt();
                 }                                
             }
         }        
@@ -455,7 +438,8 @@ public class VistaJuego1 {
                     try {
                     Thread.sleep(2000);
                 } catch (InterruptedException ex) {
-                    System.out.println(ex.getMessage());
+                    Logger.getLogger(VistaJuego1.class.getName()).log(Level.SEVERE, null, ex);
+                    Thread.currentThread().interrupt();
                 }                                
             }
         }        
@@ -475,7 +459,8 @@ public class VistaJuego1 {
                     try {
                     Thread.sleep(2000);
                 } catch (InterruptedException ex) {
-                    System.out.println(ex.getMessage());
+                    Logger.getLogger(VistaJuego1.class.getName()).log(Level.SEVERE, null, ex);
+                    Thread.currentThread().interrupt();
                 }                               
             }
         }        
@@ -499,21 +484,20 @@ public class VistaJuego1 {
                 try {
                     Thread.sleep(1000);
                 } catch (InterruptedException ex) {
-                    
+                    Logger.getLogger(VistaJuego1.class.getName()).log(Level.SEVERE, null, ex);
+                    Thread.currentThread().interrupt();
                 }
-                
             }
             FinalizarJuego();
         }
-        
     }
-    
- 
     /**
      * Inicia el juego según la dificultad pasada como parámetro
      * @param d Dificultad del nivel 
      */
     public void iniciarJuego(Dificultad d){
+        Thread cuentareg= new Thread(new HiloTiempo());
+        cuentareg.start(); 
         switch(d){
             case FACIL:                 
                 Thread thfacil = new Thread(new HiloCrearGlobosFacil());                                
@@ -549,7 +533,11 @@ public class VistaJuego1 {
                 g.onScreen=false;
                 
             }
-    }              
+    }    
+    
+    public static void finalizarJuego1(){
+        int tiempoJuego=0;
+    }
     
     
 }

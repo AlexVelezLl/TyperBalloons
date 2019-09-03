@@ -9,7 +9,6 @@ import utilities.CONSTANTES;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.control.Label;
-import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 
@@ -18,13 +17,13 @@ import javafx.scene.text.FontWeight;
  * @author Valeria Barzola
  */
 public class GloboVerde extends Globo {
-    private final ImageView globoverde;
+    private final ImageView globoverdeim;
     
     /**
     * Constructor del globo Verde que setea la imagen definida para este globo y añade las letras creadas
     */
     public GloboVerde(){
-        letralabel= new Label();
+        letralabel = new Label();
         Image img = new Image(getClass().getResourceAsStream(
                         CONSTANTES.RUTA_IMGS+"Globo_Verde.png"),
                                 170,
@@ -34,8 +33,8 @@ public class GloboVerde extends Globo {
         String s = Globo.generarLetra();
         letras.add(s);
         añadirLetras(letras,25,20);
-        globoverde = new ImageView(img);        
-        this.getChildren().addAll(globoverde,letralabel);
+        globoverdeim = new ImageView(img);        
+        this.getChildren().addAll(globoverdeim,letralabel); 
     }
 
     

@@ -8,7 +8,6 @@ package Modelo;
 import java.util.ArrayList;
 import utilities.CONSTANTES;
 import java.util.Random;
-import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
@@ -23,7 +22,7 @@ import javafx.scene.text.FontWeight;
  */
 public abstract class Globo extends Pane {      
     public boolean onScreen; 
-    protected Label letralabel;
+    public Label letralabel;
     ArrayList<String> letras = new ArrayList<>();
 
     
@@ -62,11 +61,10 @@ public abstract class Globo extends Pane {
     public static String generarLetra(){
         Random r= new Random();
         String alphabet = "abcdefghijklmnñopqrstuvwxyz";
-        char a =alphabet.charAt(r.nextInt(alphabet.length()));
-        String f = String.valueOf(a);
-        return f;
+        char a =alphabet.charAt(r.nextInt(alphabet.length()));  
+        return String.valueOf(a);
     }
-    
+ 
     /**
      * Metodo que establece el label del globo con un arreglo de letras
      * @param array Letras a ingresar en el globo

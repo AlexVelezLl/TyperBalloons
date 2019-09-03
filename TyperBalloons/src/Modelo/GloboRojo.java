@@ -6,13 +6,11 @@
 package Modelo;
 
 import utilities.CONSTANTES;
-import java.util.ArrayList;
 import java.util.Random;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.control.Label;
 import javafx.scene.paint.Color;
-import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 
 /**
@@ -20,13 +18,13 @@ import javafx.scene.text.FontWeight;
  * @author Valeria Barzola
  */
 public class GloboRojo extends Globo {
-    private final ImageView globorojo;
+    private final ImageView globorojoim;
     
     /**
     * Constructor del globo rojo que setea la imagen definida para este globo y añade las letras creadas
     */
     public GloboRojo(){  
-        letralabel= new Label();
+        letralabel = new Label();
         
         Image img = new Image(getClass().getResourceAsStream(
                         CONSTANTES.RUTA_IMGS+"Globo_Rojo.png"),
@@ -43,9 +41,8 @@ public class GloboRojo extends Globo {
         
         añadirLetras(letras,22,20);
      
-        globorojo = new ImageView(img);
-        
-        this.getChildren().addAll(globorojo,letralabel);
+        globorojoim = new ImageView(img);
+        this.getChildren().addAll(globorojoim,letralabel); 
 }
     
     
