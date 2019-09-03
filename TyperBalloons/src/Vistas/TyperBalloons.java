@@ -9,7 +9,10 @@ import controlador.Controlador;
 import java.io.File;
 import utilities.CONSTANTES;
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.image.Image;
 import javafx.scene.layout.Pane;
 import javafx.scene.media.Media;
@@ -29,26 +32,39 @@ public class TyperBalloons extends Application {
      */
     @Override
     public void start(Stage primaryStage) {
+        try{
+            VistaInicio index = new VistaInicio();
         
-        VistaInicio index = new VistaInicio();
+            Pane backGround = index.getRoot();
         
-        Pane backGround = index.getRoot();
-        
-        Controlador.setScene(new Scene(backGround));
-        //Musica de inicio   
-        Media musicFile = new Media(new File(CONSTANTES.RUTA_SOUNDS+"Game_Intro.mp3").toURI().toString());
-        Controlador.setMediaPlayer(new MediaPlayer(musicFile));
-        Controlador.getMediaPlayer().setAutoPlay(true);
+            Controlador.setScene(new Scene(backGround));
+            Media musicFile = new Media(new File(CONSTANTES.RUTA_SOUNDS+"Game_Intro.mp3").toURI().toString());
+            Controlador.setMediaPlayer(new MediaPlayer(musicFile));
+            Controlador.getMediaPlayer().setAutoPlay(true);
   
-        Controlador.getMediaPlayer().setVolume(0.7);
+            Controlador.getMediaPlayer().setVolume(0.7);
+            primaryStage.setTitle("TyperBalloons");
+            primaryStage.setHeight(CONSTANTES.HEIGHT);
+            primaryStage.setWidth(CONSTANTES.WIDTH);
+            primaryStage.setResizable(false);
+            primaryStage.setScene(Controlador.getScene());
+            primaryStage.getIcons().add(new Image(CONSTANTES.RUTA_IMGS+"ICO_01.png")); 
+            primaryStage.show();
+        }catch(IllegalArgumentException ex){
+            Alert alert = new Alert(AlertType.ERROR);
+            alert.setTitle("WOOPS!");
+            alert.setContentText("Dificultades tecnicas, por favor revisa que todos los archivos del juego "
+                    + "se encuentren en tu computadora." );
+            alert.showAndWait();
+        }catch(Exception ex){
+            Alert alert = new Alert(AlertType.ERROR);
+            alert.setTitle("WOOPS!");
+            alert.setContentText("Dificultades tecnicas, estamos trabajando en ello.\n"
+                    + "Por favor reporta este error en: https://typerballoons.000webhostapp.com\n\n"
+                    + "Error: "+ex.toString());
+            alert.showAndWait();
+        }
         
-        primaryStage.setTitle("TyperBalloons");
-        primaryStage.setHeight(CONSTANTES.HEIGHT);
-        primaryStage.setWidth(CONSTANTES.WIDTH);
-        primaryStage.setResizable(false);
-        primaryStage.setScene(Controlador.getScene());
-        primaryStage.getIcons().add(new Image(CONSTANTES.RUTA_IMGS+"ICO_01.png")); 
-        primaryStage.show();
     }
 
     /**

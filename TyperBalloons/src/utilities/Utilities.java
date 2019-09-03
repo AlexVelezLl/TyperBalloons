@@ -21,6 +21,7 @@ import javafx.scene.paint.Color;
 import controlador.Controlador;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.scene.control.Alert;
 
 /**
  * Clase que contiene herramientas utiles que serviran a lo largo del desarrollo del programa.
@@ -188,5 +189,14 @@ public final class Utilities {
 
         
         return pMsg;
+    }
+    
+    public static void reportError(Exception ex){
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle("WOOPS!");
+        alert.setContentText("Dificultades tecnicas, estamos trabajando en ello.\n"
+            + "Por favor reporta este error en: https://typerballoons.000webhostapp.com\n\n"
+            + "Error: "+ex.toString());
+        alert.showAndWait();
     }
 }

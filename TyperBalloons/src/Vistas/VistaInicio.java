@@ -24,6 +24,7 @@ import java.util.Set;
 import java.util.TreeMap;
 import java.util.TreeSet;
 import javafx.geometry.Pos;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
@@ -55,15 +56,21 @@ public class VistaInicio{
      * la Vista Inicial.
      */
     public VistaInicio(){
-   
+        
         root = new Pane();
         onRoot = new Pane();
+        
         Controlador.setbGIndex(new ImageView());
         bG01 =new Image(CONSTANTES.RUTA_IMGS+"BG_01.png");
-        Controlador.getbGIndex().setImage(bG01);
-        Controlador.setSkin(1);
-        Controlador.setSondEsp(true);
-        root.getChildren().addAll(Controlador.getbGIndex(),includeTitle(),includeButtons(),includeSN(),includeSettings(),onRoot);
+        
+            
+            Controlador.getbGIndex().setImage(bG01);
+            Controlador.setSkin(1);
+            Controlador.setSondEsp(true);
+
+            root.getChildren().addAll(Controlador.getbGIndex(),includeTitle(),includeButtons(),includeSN(),includeSettings(),onRoot);
+        
+        
     }
     
     /**
@@ -91,16 +98,25 @@ public class VistaInicio{
         Pane inicio = Utilities.boton("INICIAR JUEGO",NAMEBUTTON);
         
         inicio.setOnMouseClicked(e->{
-   
-            Pane inicioJuego = createOptions();
-            Utilities.bajarCartel(onRoot,inicioJuego,200);
+            try{
+                Pane inicioJuego = createOptions();
+                Utilities.bajarCartel(onRoot,inicioJuego,200);
+            }catch(Exception ex){
+                Utilities.reportError(ex);
+            }
+            
             
         });
 
         Pane punt = Utilities.boton("VER PUNTAJES",NAMEBUTTON);
         punt.setOnMouseClicked(e->{
-            Pane puntuaciones = createPunt();
-            Utilities.bajarCartel(onRoot, puntuaciones, 200);
+            try{
+                Pane puntuaciones = createPunt();
+                Utilities.bajarCartel(onRoot, puntuaciones, 200); 
+            }catch(Exception ex){
+                Utilities.reportError(ex);
+            }
+            
         });
         
         Pane salir = Utilities.boton("SALIR", NAMEBUTTON);
@@ -121,10 +137,14 @@ public class VistaInicio{
         Controlador.getTitle().setOnMouseClicked(e->{
             Desktop enlace=Desktop.getDesktop();
             String link = "https://typerballoons.000webhostapp.com";
+            
             try {
                 enlace.browse(new URI(link));
             } catch (IOException|URISyntaxException ex) {
-                ex.getMessage();
+                Label errorLink = new Label("Ha ocurrido un error con la pagina web!");
+                errorLink.setFont(CONSTANTES.FUENTE2);
+                errorLink.setTextFill(Color.WHITE);
+                root.getChildren().add(errorLink);
             }
         });
         
@@ -153,7 +173,10 @@ public class VistaInicio{
             try {
                 enlace.browse(new URI(link));
             } catch (IOException|URISyntaxException ex) {
-                ex.getMessage();
+                Label errorLink = new Label("Ha ocurrido un error con nuestra pagina de Facebook :(");
+                errorLink.setFont(CONSTANTES.FUENTE2);
+                errorLink.setTextFill(Color.WHITE);
+                root.getChildren().add(errorLink);
             }
         });
         
@@ -164,7 +187,10 @@ public class VistaInicio{
             try {
                 enlace.browse(new URI(link));
             } catch (IOException|URISyntaxException ex) {
-                ex.getMessage();
+                Label errorLink = new Label("Ha ocurrido un error con nuestra pagina de Twitter :(");
+                errorLink.setFont(CONSTANTES.FUENTE2);
+                errorLink.setTextFill(Color.WHITE);
+                root.getChildren().add(errorLink);
             }
         });
         sn.getChildren().addAll(pFB,pTwitter);
@@ -187,101 +213,109 @@ public class VistaInicio{
             rect.setLayoutX(174);
             rect.setLayoutY(390);
         eng.setOnMouseClicked(e->{
-            Pane setingsPane = new Pane();
- 
-            Pane pRetro = Utilities.boton("Retro_Button");
-            Button b = new Button();
-            b.setLayoutX(-20);
-            
-            pRetro.setOnMouseClicked(a->Utilities.transition2(setingsPane, root));
-            
-            pRetro.setOnKeyPressed(a->{
-                if(a.getCode()==KeyCode.ESCAPE){
-                    Utilities.transition2(setingsPane, root);
-                }
-            });
-            ImageView bGSettings = new ImageView(new Image(CONSTANTES.RUTA_IMGS+"BG_STGNS01.png"));
-            VBox config = new VBox();
-            config.setSpacing(40);
-            config.setMaxWidth(600);
-            
-            Label lVolumen = new Label("Volumen:");
-            lVolumen.setFont(CONSTANTES.FUENTE);
-            lVolumen.setTextFill(Color.WHITE);
-            Pane pVolumen = Controlador.volumenControl();
-            config.setLayoutX(100);
-            config.setLayoutY(65);
-            Label lSonidos = new Label("Efectos de sonido: ");
-            lSonidos.setFont(CONSTANTES.FUENTE);
-            lSonidos.setTextFill(Color.WHITE);
-            VBox vbVolumen = new VBox();
-            vbVolumen.getChildren().addAll(lVolumen,pVolumen);
-            ImageView checkBox = new ImageView(new Image(CONSTANTES.RUTA_IMGS+"CheckBox1.png"));
-            ImageView check = new ImageView(new Image(CONSTANTES.RUTA_IMGS+"Check.png"));
-            HBox hbCheckBox = new HBox();
-            Pane pCheckBox = new Pane();
-            if(Controlador.isSondEsp()){
-                pCheckBox.getChildren().addAll(checkBox,check);
-            }else{
-                pCheckBox.getChildren().addAll(checkBox);
-            }
-            
-            pCheckBox.setOnMouseClicked(a->{
+            try{
+                Pane setingsPane = new Pane();
+
+                Pane pRetro = Utilities.boton("Retro_Button");
+                Button b = new Button();
+                b.setLayoutX(-20);
+
+                pRetro.setOnMouseClicked(a->Utilities.transition2(setingsPane, root));
+
+                pRetro.setOnKeyPressed(a->{
+                    if(a.getCode()==KeyCode.ESCAPE){
+                        Utilities.transition2(setingsPane, root);
+                    }
+                });
+                ImageView bGSettings = new ImageView(new Image(CONSTANTES.RUTA_IMGS+"BG_STGNS01.png"));
+                VBox config = new VBox();
+                config.setSpacing(40);
+                config.setMaxWidth(600);
+
+                Label lVolumen = new Label("Volumen:");
+                lVolumen.setFont(CONSTANTES.FUENTE);
+                lVolumen.setTextFill(Color.WHITE);
+                Pane pVolumen = Controlador.volumenControl();
+                config.setLayoutX(100);
+                config.setLayoutY(65);
+                Label lSonidos = new Label("Efectos de sonido: ");
+                lSonidos.setFont(CONSTANTES.FUENTE);
+                lSonidos.setTextFill(Color.WHITE);
+                VBox vbVolumen = new VBox();
+                vbVolumen.getChildren().addAll(lVolumen,pVolumen);
+                ImageView checkBox = new ImageView(new Image(CONSTANTES.RUTA_IMGS+"CheckBox1.png"));
+                ImageView check = new ImageView(new Image(CONSTANTES.RUTA_IMGS+"Check.png"));
+                HBox hbCheckBox = new HBox();
+                Pane pCheckBox = new Pane();
                 if(Controlador.isSondEsp()){
-                    Controlador.setSondEsp(false);
-                    pCheckBox.getChildren().remove(check);
+                    pCheckBox.getChildren().addAll(checkBox,check);
                 }else{
-                    Controlador.setSondEsp(true);
-                    pCheckBox.getChildren().add(check);
+                    pCheckBox.getChildren().addAll(checkBox);
                 }
-            });
-            hbCheckBox.getChildren().addAll(lSonidos,pCheckBox);
-            VBox vBSkin = new VBox();
-           
-            Label lSkin = new Label("Skin");
-           
-            lSkin.setFont(CONSTANTES.FUENTE);
-            lSkin.setTextFill(Color.WHITE);
-            Pane pSkin = new Pane();
-            
-            ImageView skin1 = new ImageView(bG01);
-            skin1.setFitHeight(135);
-            skin1.setFitWidth(180);
-            ImageView skin2 = new ImageView(new Image(CONSTANTES.RUTA_IMGS+"BG_03.png"));
-            skin2.setFitHeight(135);
-            skin2.setFitWidth(180);
-            
-            StackPane pSkin1 = new StackPane();
-            StackPane pSkin2 = new StackPane();
-            pSkin1.setLayoutX(80);
-            pSkin2.setLayoutX(340);
-            
-            pSkin1.getChildren().addAll(new Rectangle(184,139),skin1);
-            pSkin2.getChildren().addAll(new Rectangle(184,139),skin2);
-            
-            pSkin1.setOnMouseClicked(e1->{
-                rect.setLayoutX(174);
-                Controlador.getbGIndex().setImage(bG01);
-                Controlador.getTitle().setImage(new Image(CONSTANTES.RUTA_IMGS+"TyperBallons_Title04.png"));
-                Controlador.setSkin(1);
-                
-            });
-            pSkin2.setOnMouseClicked(e1->{
-                rect.setLayoutX(434);
-                Controlador.getbGIndex().setImage(new Image(CONSTANTES.RUTA_IMGS+"BG_03.png"));
-                Controlador.getTitle().setImage(new Image(CONSTANTES.RUTA_IMGS+"TyperBallons_Title01.png"));
-                Controlador.setSkin(2);
-            });
-            
-            pSkin.getChildren().addAll(pSkin1,pSkin2);
-            
-            vBSkin.getChildren().addAll(lSkin,pSkin);
-            vBSkin.setAlignment(Pos.CENTER);
-            vBSkin.setSpacing(10);
-            config.getChildren().addAll(vbVolumen,hbCheckBox,vBSkin);
-            setingsPane.getChildren().addAll(b,bGSettings,pRetro,rect,config);
-            Utilities.transition2(root,setingsPane);
-            
+
+                pCheckBox.setOnMouseClicked(a->{
+                    if(Controlador.isSondEsp()){
+                        Controlador.setSondEsp(false);
+                        pCheckBox.getChildren().remove(check);
+                    }else{
+                        Controlador.setSondEsp(true);
+                        pCheckBox.getChildren().add(check);
+                    }
+                });
+                hbCheckBox.getChildren().addAll(lSonidos,pCheckBox);
+                VBox vBSkin = new VBox();
+
+                Label lSkin = new Label("Skin");
+
+                lSkin.setFont(CONSTANTES.FUENTE);
+                lSkin.setTextFill(Color.WHITE);
+                Pane pSkin = new Pane();
+
+                ImageView skin1 = new ImageView(bG01);
+                skin1.setFitHeight(135);
+                skin1.setFitWidth(180);
+                ImageView skin2 = new ImageView(new Image(CONSTANTES.RUTA_IMGS+"BG_03.png"));
+                skin2.setFitHeight(135);
+                skin2.setFitWidth(180);
+
+                StackPane pSkin1 = new StackPane();
+                StackPane pSkin2 = new StackPane();
+                pSkin1.setLayoutX(80);
+                pSkin2.setLayoutX(340);
+
+                pSkin1.getChildren().addAll(new Rectangle(184,139),skin1);
+                pSkin2.getChildren().addAll(new Rectangle(184,139),skin2);
+
+                pSkin1.setOnMouseClicked(e1->{
+                    rect.setLayoutX(174);
+                    Controlador.getbGIndex().setImage(bG01);
+                    Controlador.getTitle().setImage(new Image(CONSTANTES.RUTA_IMGS+"TyperBallons_Title04.png"));
+                    Controlador.setSkin(1);
+
+                });
+                pSkin2.setOnMouseClicked(e1->{
+                    rect.setLayoutX(434);
+                    Controlador.getbGIndex().setImage(new Image(CONSTANTES.RUTA_IMGS+"BG_03.png"));
+                    Controlador.getTitle().setImage(new Image(CONSTANTES.RUTA_IMGS+"TyperBallons_Title01.png"));
+                    Controlador.setSkin(2);
+                });
+
+                pSkin.getChildren().addAll(pSkin1,pSkin2);
+
+                vBSkin.getChildren().addAll(lSkin,pSkin);
+                vBSkin.setAlignment(Pos.CENTER);
+                vBSkin.setSpacing(10);
+                config.getChildren().addAll(vbVolumen,hbCheckBox,vBSkin);
+                setingsPane.getChildren().addAll(b,bGSettings,pRetro,rect,config);
+                Utilities.transition2(root,setingsPane);
+            }catch(Exception ex){
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("WOOPS!");
+                alert.setContentText("Dificultades tecnicas, estamos trabajando en ello.\n"
+                    + "Por favor reporta este error en: https://typerballoons.000webhostapp.com\n\n"
+                    + "Error: "+ex.toString());
+                alert.showAndWait();
+            }
         });
         
         return eng;
@@ -328,21 +362,32 @@ public class VistaInicio{
 
         Pane pFacil = Utilities.boton("FACIL","GreenButton");
         pFacil.setOnMouseClicked(e->{
-
-            VistaJuego1 vj = new VistaJuego1(Dificultad.FACIL);
+            try{
+                VistaJuego1 vj = new VistaJuego1(Dificultad.FACIL);
+                Utilities.transition(root,vj.getRoot());
+            }catch(Exception ex){
+                Utilities.reportError(ex);
+            }
             
-            Utilities.transition(root,vj.getRoot());
         });
 
         Pane pMedio = Utilities.boton("MEDIO","YellowButton");
         pMedio.setOnMouseClicked(e->{
-            VistaJuego1 vj = new VistaJuego1(Dificultad.MEDIO);
-            Utilities.transition(root,vj.getRoot());
+            try{
+                VistaJuego1 vj = new VistaJuego1(Dificultad.MEDIO);
+                Utilities.transition(root,vj.getRoot());
+            }catch(Exception ex){
+                Utilities.reportError(ex);
+            }
         });
         Pane pDificil = Utilities.boton("DIFICIL", "RedButton");
         pDificil.setOnMouseClicked(e->{
-            VistaJuego1 vj = new VistaJuego1(Dificultad.DIFICIL);
-            Utilities.transition(root,vj.getRoot());
+            try{
+                VistaJuego1 vj = new VistaJuego1(Dificultad.DIFICIL);
+                Utilities.transition(root,vj.getRoot());
+            }catch(Exception ex){
+                Utilities.reportError(ex);
+            }
         });
         dificultad.getChildren().addAll(lDificultad,pFacil,pMedio,pDificil);
         dificultad.setAlignment(Pos.CENTER);
@@ -430,7 +475,10 @@ public class VistaInicio{
             try(ObjectOutputStream ob = new ObjectOutputStream(new FileOutputStream("src/data/scores.dat"))){
                 ob.writeObject(tr);
             }catch(Exception ex1){
-                System.out.println(ex1);
+                Label error = new Label("Ha ocurrido un error cargando los datos del juego :(");
+                error.setFont(CONSTANTES.FUENTE2);
+                error.setTextFill(Color.WHITE);
+                vBPuntajes.getChildren().add(error);
             }
             
         }
