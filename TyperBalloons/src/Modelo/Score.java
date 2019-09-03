@@ -12,20 +12,13 @@ import java.io.Serializable;
  * @author CORE i7 ULTIMATE
  */
 public class Score implements Comparable<Score>,Serializable{
-    public String nombre;
-    public int puntaje;
+    private String nombre;
+    private int puntaje;
     
     public Score(){
         nombre = null;
         puntaje = 0;
     }
-
-    public Score(Dificultad df) {
-        nombre = "";
-        puntaje=0; 
-        
-    }
-
     public Score(String nombre, int i) {
         this.nombre=nombre;
         puntaje=i;//To change body of generated methods, choose Tools | Templates.
@@ -57,6 +50,11 @@ public class Score implements Comparable<Score>,Serializable{
             }
         }
         return c;
+    }
+
+    @Override
+    public String toString() {
+        return "Score{" + "nombre=" + nombre + ", puntaje=" + puntaje + '}';
     }
 }
 

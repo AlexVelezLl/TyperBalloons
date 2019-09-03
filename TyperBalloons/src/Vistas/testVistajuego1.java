@@ -9,7 +9,6 @@ import Modelo.Dificultad;
 import Modelo.GloboAmarillo;
 import Modelo.Juego;
 import controlador.Controlador;
-import data.GameData;
 import utilities.CONSTANTES;
 import javafx.application.Application;
 import javafx.scene.Scene;

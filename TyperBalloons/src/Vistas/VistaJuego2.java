@@ -125,8 +125,13 @@ public class VistaJuego2 {
         //creando espacio
         onRoot.setPadding(new Insets(20,0,20,20));
         //un background
+        ImageView bGView=null;
+        if (Controlador.getSkin()==1) {
+            bGView = new ImageView(new Image(CONSTANTES.RUTA_IMGS+"BG_02.png"));
+        }else{
+            bGView = new ImageView(new Image(CONSTANTES.RUTA_IMGS+"BG_04.png"));
+        }                              
         
-        ImageView  bGView = Controlador.getbGGame();
         //Creando la parte donde aparecen las letras ((izq))
         HBox titulo= new HBox();
         Label letra= new Label("Letra");
@@ -183,8 +188,10 @@ public class VistaJuego2 {
             if(e.getCode().equals(KeyCode.ENTER)&&tiempoTranscurrido!=0){
                 String user_word = player_word.getText().toLowerCase(); //obteniendo palabra
                 try{
-                  if(disponible(user_word,player_unique)){
+                  if(disponible(user_word,player_unique,l2)){
                   removeChar(user_word);
+                  }else{
+                     throw(new ExcepcionPalabraNoValida("no ingreso letra valida"));
                   }
                    player_word.clear();
                 }catch(ExcepcionPalabraNoValida ex) {
@@ -194,9 +201,7 @@ public class VistaJuego2 {
 
                 } 
             }
-        });
-         
-        }
+        });}
     
     public void removeChar(String user_word){
         for(int w= 0; w<user_word.length();w++){
@@ -204,30 +209,33 @@ public class VistaJuego2 {
                 Iterator<Node> itr= playerLetters.getChildren().iterator();
                 while(itr.hasNext()){
                 HBox h= (HBox)itr.next();
-                if(((((Label)h.getChildren().get(0)).getText()).equals(u))&&(player_l.get(u)!=0)){
+                if(((Label)h.getChildren().get(0)).getText().equals(u)){ 
+                    if (player_l.get(u)!=0){
                     Label n= new Label(String.valueOf(player_l.get(u))); 
-                    n.setFont(CONSTANTES.FUENTEJ2);
+                    n.setFont(CONSTANTES.FUENTEJ);
                     n.setTextFill(Color.BLACK);
-                    h.getChildren().set(1, n);
-               }else{
-                   itr.remove(); 
-                   }
-                
-            }}
+                    h.getChildren().set(1, n); 
+                    }else{
+                        itr.remove(); 
+                }}}}
     }
         
-    public boolean disponible(String user_word, Set<String> player_unique){
+    public boolean disponible(String user_word, Set<String> player_unique,Label l2){
             int disponible= 0;  //variable que permite si tiene esas letras disponibles
-            if(!player_unique.contains(user_word)&& game_words.containsKey(user_word)){
+            if(!player_unique.contains(user_word)&& game_words.containsKey(user_word)&&user_word!=null){
                player_unique.add(user_word); 
                 for(int w= 0; w<user_word.length();w++){
                 String u= Character.toString(user_word.charAt(w)).toLowerCase(); 
                     if(player_l.containsKey(u)&&player_l.get(u)>0){
                     disponible+=1; 
                     player_l.replace(u,player_l.get(u)-1);
+                    l2.setText("Nice!");
+                    pTotal= pTotal +game_words.get(user_word);
                     }}
-                  }
-                  return user_word.length()==disponible;
+                
+                return user_word.length()==disponible;   
+                }
+                  return false;
                 }
             
     
