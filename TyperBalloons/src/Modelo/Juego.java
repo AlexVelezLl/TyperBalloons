@@ -35,17 +35,12 @@ public class Juego {
     private  TreeMap<Dificultad,TreeSet<Score>> scoresF; 
 
     
-    public Juego(){
+    public Juego(Dificultad f){
         scoresF = new TreeMap(); 
         game_words= cargarPalabras();
         player_score= new Score(); 
         player_l = new HashMap();
-        player_l.put("a",3);
-        player_l.put("c", 4); 
-        player_l.put("h", 5); 
-        player_l.put("o", 2); 
-        player_l.put("l", 1); 
-        df= Dificultad.FACIL;
+        df= f;
     }
     
     public HashMap<String, Integer> getGame_words() {

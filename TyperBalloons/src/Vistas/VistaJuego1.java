@@ -20,6 +20,7 @@ import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Map.Entry;
 import utilities.CONSTANTES;
 import javafx.scene.layout.Pane;
 import javafx.scene.image.Image;
@@ -34,7 +35,6 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.HBox;
-import static javafx.scene.layout.Region.USE_COMPUTED_SIZE;
 import javafx.scene.layout.VBox;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
@@ -57,7 +57,8 @@ public class VistaJuego1 {
     Pane onRoot;
     Pane pMessage;
     Label tiempo;
-    private static int tiempoJuego;
+    int tiempoJuego;
+    private static boolean activo=true;
     Label globos;
     int numeroGlobos;
     private Random random=new Random();
@@ -66,11 +67,11 @@ public class VistaJuego1 {
     protected HashMap<String,Integer> letrasObtenidas;
     protected Thread mov;
     
-    public VistaJuego1(Dificultad f){
-        juego= new Juego();
+    public VistaJuego1(Dificultad f){        
+        juego= new Juego(f);
         letrasObtenidas= juego.getPlayer_l();
         globoslista = new ArrayList<>();    
-        tiempoJuego=60;
+        tiempoJuego=10;
         root = crearElementos();
         iniciarJuego(f);
                
@@ -285,10 +286,10 @@ public class VistaJuego1 {
     public ScrollPane paneLetrasObtenidas(){          
         ScrollPane scrollp = new ScrollPane();
         VBox playerLetters= new VBox();
-        for(String s: letrasObtenidas.keySet()){
+        for(Entry<String,Integer> s: letrasObtenidas.entrySet()){
             HBox box= new HBox();
-            Label letter= new Label(s);
-            Label num= new Label(Integer.toString(letrasObtenidas.get(s))); 
+            Label letter= new Label(s.getKey());
+            Label num= new Label(Integer.toString(letrasObtenidas.get(s.getKey()))); 
             letter.setFont(theFont);
             num.setFont(theFont);
             box.getChildren().addAll(letter,num);
@@ -389,7 +390,7 @@ public class VistaJuego1 {
     private class HiloCrearGlobosMalos implements Runnable{
         @Override
         public void run() {
-            while(tiempoJuego!=0){
+            while(tiempoJuego!=0&&activo){
                 Platform.runLater(()->crearGloboMalo(7));
                     try {
                     Thread.sleep(5000);
@@ -409,7 +410,7 @@ public class VistaJuego1 {
     private class HiloCrearGlobosFacil implements Runnable{        
         @Override
         public void run() {
-            while(tiempoJuego!=0){
+            while(tiempoJuego!=0&&activo){
                 Platform.runLater(()->{                     
                     crearGloboVerde(10);
                     crearGloboAmarillo(10);
@@ -430,7 +431,7 @@ public class VistaJuego1 {
 
         @Override
         public void run() {
-            while(tiempoJuego!=0){
+            while(tiempoJuego!=0&&activo){
                 Platform.runLater(()->{                                         
                     crearGloboRojo(9);
                     crearGloboVerde(9);
@@ -451,7 +452,7 @@ public class VistaJuego1 {
     private class HiloCrearGlobosDificil implements Runnable{
         @Override
         public void run() {
-            while(tiempoJuego!=0){
+            while(tiempoJuego!=0&&activo){
                 Platform.runLater(()->{                     
                     crearGloboVerde(7);
                     crearGloboAmarillo(7);
@@ -477,7 +478,7 @@ public class VistaJuego1 {
         public void run() {
             
             
-            while(tiempoJuego!=0){
+            while(tiempoJuego!=0&&activo){
                 tiempoJuego-=1;
                 Platform.runLater(()->tiempo.setText(String.valueOf(tiempoJuego)));
                 try {
@@ -535,11 +536,11 @@ public class VistaJuego1 {
     }    
     
     public static void finalizarJuego1(){
-        tiempoJuego=0;        
+        activo = false;        
     }
     
-    public static int getTiempoJuego(){
-        return tiempoJuego;
+    public static boolean getActivo(){
+        return activo;
     }
     
 }

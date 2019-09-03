@@ -59,7 +59,7 @@ public class VistaJuego2 {
     private Pane onRoot;
     private final Juego pd;
     private Label tiempo;
-    private static int tiempoTranscurrido;
+    private int tiempoTranscurrido;
     private Integer pTotal;
     private VBox playerLetters;
     private boolean terminarJuego=false;
@@ -191,7 +191,7 @@ public class VistaJuego2 {
             if(e.getCode().equals(KeyCode.ENTER)&&tiempoTranscurrido!=0){
                 String user_word = player_word.getText().toLowerCase(); //obteniendo palabra
                 try{
-                  if(disponible(user_word,player_unique,l2)){
+                  if(disponible(user_word,player_unique)){
                   removeChar(user_word);
                   pTotal= pTotal +game_words.get(user_word);
                   l2.setText("Nice!");
@@ -225,7 +225,7 @@ public class VistaJuego2 {
                 }}}}
     }
         
-    public boolean disponible(String user_word, Set<String> player_unique,Label l2){
+    public boolean disponible(String user_word, Set<String> player_unique){
             int disponible= 0;  //variable que permite si tiene esas letras disponibles
             if(!player_unique.contains(user_word)&& game_words.containsKey(user_word)&&user_word!=null){
                player_unique.add(user_word); 
@@ -256,7 +256,8 @@ public class VistaJuego2 {
                 try {
                     Thread.sleep(1000);
                 } catch (InterruptedException ex) {
-                    Logger.getLogger(VistaJuego2.class.getName()).log(Level.SEVERE, null, ex);
+                    Logger.getLogger(Utilities.class.getName()).log(Level.SEVERE, null, ex);
+                    Thread.currentThread().interrupt();
                 }
             }
             finalizarJuego();
@@ -275,7 +276,7 @@ public class VistaJuego2 {
      * de mayor a menor
      */
      private void escribir2(TreeMap<Dificultad,TreeSet<Score>> scoregame){
-        try(ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(CONSTANTES.GameData+".dat"))){
+        try(ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(CONSTANTES.GAMEDATA+".dat"))){
             scoregame.get(pd.getDf()).add(pd.getPlayer_score()); 
             oos.writeObject(scoregame);
         } catch (FileNotFoundException ex) {
@@ -288,7 +289,7 @@ public class VistaJuego2 {
     }
     
       private void escribir1(){
-        try(ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(CONSTANTES.GameData+".dat"))){
+        try(ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(CONSTANTES.GAMEDATA+".dat"))){
             TreeMap<Dificultad,TreeSet<Score>> scoresGvacio = new TreeMap();
             scoresGvacio.put(Dificultad.FACIL, new TreeSet<>());
             scoresGvacio.put(Dificultad.MEDIO, new TreeSet<>());
@@ -313,7 +314,7 @@ public class VistaJuego2 {
      */
      public TreeMap<Dificultad,TreeSet<Score>> leerArchivo() throws FileNotFoundException{
          TreeMap<Dificultad,TreeSet<Score>> scoresG; 
-         try(ObjectInputStream ois = new ObjectInputStream(new FileInputStream(CONSTANTES.GameData+".dat"))){
+         try(ObjectInputStream ois = new ObjectInputStream(new FileInputStream(CONSTANTES.GAMEDATA+".dat"))){
                 Score f= pd.getPlayer_score();
                 scoresG = (TreeMap<Dificultad,TreeSet<Score>>)ois.readObject();
             return scoresG;
@@ -416,8 +417,6 @@ public class VistaJuego2 {
               });
             
     }
-    public static void finalizarJuego2(){
-        tiempoTranscurrido =0;
-    }
+    
 }
   

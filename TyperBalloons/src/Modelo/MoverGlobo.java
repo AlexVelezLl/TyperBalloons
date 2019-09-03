@@ -29,7 +29,7 @@ public class MoverGlobo implements Runnable {
     public void run() {
         for (int i=0;i<875;i++){
         Platform.runLater(()->globo.setLayoutY(globo.getPosicionY()-1));
-        if(VistaJuego1.getTiempoJuego()==0){
+        if(!VistaJuego1.getActivo()){
             Thread.currentThread().interrupt();
         }
                 try {
