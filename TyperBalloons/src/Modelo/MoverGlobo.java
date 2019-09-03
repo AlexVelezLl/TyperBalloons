@@ -26,8 +26,7 @@ public class MoverGlobo implements Runnable {
 
     @Override
     public void run() {
-        
-            for (int i=0;i<875;i++){
+        for (int i=0;i<875;i++){
         Platform.runLater(()->{
             globo.setLayoutY(globo.getPosicionY()-1);
             });
