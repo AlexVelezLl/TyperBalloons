@@ -190,7 +190,10 @@ public final class Utilities {
         
         return pMsg;
     }
-    
+    /**
+     * Metodo que reporta alguna excepcion que haya ocurrido en el pograma de una manera adecuada
+     * @param ex Excepcion que es producida y necesita ser controlada
+     */
     public static void reportError(Exception ex){
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle("WOOPS!");

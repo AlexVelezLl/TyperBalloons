@@ -59,7 +59,7 @@ public class VistaJuego2 {
     private Pane onRoot;
     private final Juego pd;
     private Label tiempo;
-    private int tiempoTranscurrido;
+    private static int tiempoTranscurrido;
     private Integer pTotal;
     private VBox playerLetters;
     private boolean terminarJuego=false;
@@ -316,24 +316,17 @@ public class VistaJuego2 {
          try(ObjectInputStream ois = new ObjectInputStream(new FileInputStream(CONSTANTES.GameData+".dat"))){
                 Score f= pd.getPlayer_score();
                 scoresG = (TreeMap<Dificultad,TreeSet<Score>>)ois.readObject();
-                Dificultad df= pd.getDf(); 
-                if(scoresG.containsKey(df)){
-                    scoresG.get(df).add(f); 
-                }else{
-                    TreeSet<Score> scorep= new TreeSet();
-                    scorep.add(f); 
-                    scoresG.put(df, scorep); 
-                }
             return scoresG;
-            
+             
             }catch (IOException ex) {
-                Logger.getLogger(VistaJuego2.class.getName()).log(Level.SEVERE, null, ex);
+                
                 escribir1();
                         
             }catch (ClassNotFoundException ex){
              Logger.getLogger(VistaJuego2.class.getName()).log(Level.SEVERE, null, ex);
              Utilities.reportError(ex);   
         }
+        
             TreeMap<Dificultad,TreeSet<Score>> scoresGvacio = new TreeMap();
             scoresGvacio.put(Dificultad.FACIL, new TreeSet<>());
             scoresGvacio.put(Dificultad.MEDIO, new TreeSet<>());
@@ -386,7 +379,7 @@ public class VistaJuego2 {
                     //sin continuar
                     VistaInicio inP= new VistaInicio();
                     onRoot.getChildren().clear();
-                    utilities.Utilities.transition2(onRoot, inP.getRoot());
+                    Utilities.transition2(onRoot, inP.getRoot());
                 });
                 shareScore.setOnMouseClicked(e->{
                     try {
@@ -404,10 +397,14 @@ public class VistaJuego2 {
                         pd.getPlayer_score().setNombre(userData.getText());
                         pd.getPlayer_score().setPuntaje(pTotal);
                         try{
-                            TreeMap<Dificultad,TreeSet<Score>> scoresGame= leerArchivo();
-                                escribir2(scoresGame);
                             
+                            TreeMap<Dificultad,TreeSet<Score>> scoresGame= leerArchivo();
+                            escribir2(scoresGame);
+                            Label a = new Label("Datos guardados correctamente!");
+                            a.setFont(thef);a.setTextFill(Color.WHITE);
+                            userInfo.getChildren().add(a);
                         }catch (FileNotFoundException ex){
+      
                             escribir1();
                             Logger.getLogger(VistaJuego2.class.getName()).log(Level.SEVERE, null, ex);
                         }
@@ -418,6 +415,9 @@ public class VistaJuego2 {
                Utilities.bajarCartel(onRoot, Over, 200);
               });
             
+    }
+    public static void finalizarJuego2(){
+        tiempoTranscurrido =0;
     }
 }
   

@@ -33,9 +33,7 @@ public class TyperBalloons extends Application {
     public void start(Stage primaryStage) {
         try{
             VistaInicio index = new VistaInicio();
-        
             Pane backGround = index.getRoot();
-        
             Controlador.setScene(new Scene(backGround));
             Media musicFile = new Media(new File(CONSTANTES.RUTA_SOUNDS+"Game_Intro.mp3").toURI().toString());
             Controlador.setMediaPlayer(new MediaPlayer(musicFile));
@@ -70,6 +68,7 @@ public class TyperBalloons extends Application {
      @Override
          public void stop(){
             VistaJuego1.finalizarJuego1();
+            VistaJuego2.finalizarJuego2();
         }
 
     /**

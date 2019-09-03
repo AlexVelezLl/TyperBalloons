@@ -57,7 +57,7 @@ public class VistaJuego1 {
     Pane onRoot;
     Pane pMessage;
     Label tiempo;
-    static int tiempoJuego;
+    private static int tiempoJuego;
     Label globos;
     int numeroGlobos;
     private Random random=new Random();
@@ -95,11 +95,10 @@ public class VistaJuego1 {
         
         
         
-        Button b = new Button();
-        b.setLayoutY(100);
+        
         HBox tiempocontenedor= contenedorTiempo();
         HBox marcador= marcadorCont();
-        raiz.getChildren().addAll(new Button(),b,imv,tiempocontenedor,gpane,onRoot,marcador,pMessage);
+        raiz.getChildren().addAll(new Button(),imv,tiempocontenedor,gpane,onRoot,marcador,pMessage);
         raiz.setOnKeyPressed(e->{
             String letra = e.getText();                      
             Iterator <Globo> iterator = globoslista.iterator();
@@ -539,6 +538,9 @@ public class VistaJuego1 {
         tiempoJuego=0;        
     }
     
+    public static int getTiempoJuego(){
+        return tiempoJuego;
+    }
     
 }
 

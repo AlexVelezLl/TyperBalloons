@@ -471,15 +471,6 @@ public class VistaInicio{
             a.setFont(CONSTANTES.FUENTE2);
             a.setTextFill(Color.WHITE);
             hBDif.getChildren().add(a);
-            TreeMap<Dificultad,Set<Score>> tr = new TreeMap<>();
-            try(ObjectOutputStream ob = new ObjectOutputStream(new FileOutputStream("src/data/scores.dat"))){
-                ob.writeObject(tr);
-            }catch(Exception ex1){
-                Label error = new Label("Ha ocurrido un error cargando los datos del juego :(");
-                error.setFont(CONSTANTES.FUENTE2);
-                error.setTextFill(Color.WHITE);
-                vBPuntajes.getChildren().add(error);
-            }
             
         }
         vBPuntajes.getChildren().addAll(lPuntajes,hBDif);

@@ -5,7 +5,9 @@
  */
 package Modelo;
 
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.HashMap;
 import java.util.Set;
@@ -18,7 +20,7 @@ import java.util.TreeSet;
  */
 public class TestScore {
     public static void main(String [] args){
-        TreeMap<Dificultad,Set<Score>> scoresMax = new TreeMap<>();
+        /*TreeMap<Dificultad,Set<Score>> scoresMax = new TreeMap<>();
         
         TreeSet<Score> medio = new TreeSet<>();
         medio.add(new Score("ALEX",92));
@@ -61,9 +63,9 @@ public class TestScore {
         
         scoresMax.put(Dificultad.FACIL, facil);
         scoresMax.put(Dificultad.MEDIO, medio);
-        
-        try(ObjectOutputStream ous = new ObjectOutputStream(new FileOutputStream("src/data/scores.dat"))){
-            ous.writeObject(scoresMax);
+        */
+        try(ObjectInputStream ous = new ObjectInputStream(new FileInputStream("src/data/scores.dat"))){
+            System.out.println(ous.readObject());
         }catch(Exception ex){
             System.out.println("Hola");
         }
