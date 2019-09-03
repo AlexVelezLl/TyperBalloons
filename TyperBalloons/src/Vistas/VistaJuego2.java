@@ -190,6 +190,9 @@ public class VistaJuego2 {
                 try{
                   if(disponible(user_word,player_unique,l2)){
                   removeChar(user_word);
+                  pTotal= pTotal +game_words.get(user_word);
+                  l2.setText("Nice!");
+                  
                   }else{
                      throw(new ExcepcionPalabraNoValida("no ingreso letra valida"));
                   }
@@ -197,7 +200,6 @@ public class VistaJuego2 {
                 }catch(ExcepcionPalabraNoValida ex) {
                     l2.setText("Vuelve a tratar");
                     player_word.clear();
-                    Logger.getLogger(VistaJuego2.class.getName()).log(Level.SEVERE, null, ex);
 
                 } 
             }
@@ -229,8 +231,6 @@ public class VistaJuego2 {
                     if(player_l.containsKey(u)&&player_l.get(u)>0){
                     disponible+=1; 
                     player_l.replace(u,player_l.get(u)-1);
-                    l2.setText("Nice!");
-                    pTotal= pTotal +game_words.get(user_word);
                     }}
                 
                 return user_word.length()==disponible;   
