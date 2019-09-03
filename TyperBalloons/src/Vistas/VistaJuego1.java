@@ -93,6 +93,36 @@ public class VistaJuego1 {
             imv = new ImageView(new Image(CONSTANTES.RUTA_IMGS+"BG_04.png"));
         }                              
         
+        
+        
+        Button b = new Button();
+        b.setLayoutY(100);
+        HBox tiempocontenedor= contenedorTiempo();
+        HBox marcador= marcadorCont();
+        raiz.getChildren().addAll(new Button(),b,imv,tiempocontenedor,gpane,onRoot,marcador,pMessage);
+        raiz.setOnKeyPressed(e->{
+            String letra = e.getText();                      
+            Iterator <Globo> iterator = globoslista.iterator();
+            while(iterator.hasNext()){
+                
+                Globo g = iterator.next();
+                if(g.getLetras().contains(letra) && g.onScreen){                  
+                    Platform.runLater(()->onRoot.getChildren().clear());
+                    juegoGlobos(g,letra);
+                    if (letrasObtenidas.keySet().contains(letra.toLowerCase())) {
+                        int cont= letrasObtenidas.get(letra.toLowerCase())+1;
+                        letrasObtenidas.put(letra.toLowerCase(), cont);
+                        if (g instanceof GloboMalo) {letrasObtenidas.put(letra.toLowerCase(),0);}                        
+                    }else{
+                        letrasObtenidas.put(letra.toLowerCase(), 1);
+                        if (g instanceof GloboMalo){ letrasObtenidas.put(letra.toLowerCase(),0);  }                      
+                    }
+                }
+            }});
+        return raiz;
+    }
+    
+    public HBox marcadorCont(){
         Label lg = new Label("Numero de \n Globos:");
         
         lg.setFont(theFont);
@@ -114,32 +144,8 @@ public class VistaJuego1 {
         marcador.getChildren().addAll(lg,p);
         marcador.setLayoutX(540);
         marcador.setLayoutY(40);
-        
-        Button b = new Button();
-        b.setLayoutY(100);
-        HBox tiempocontenedor= contenedorTiempo();
-        raiz.getChildren().addAll(new Button(),b,imv,tiempocontenedor,gpane,onRoot,marcador,pMessage);
-        raiz.setOnKeyPressed(e->{
-            String letra = e.getText();                      
-            Iterator <Globo> iterator = globoslista.iterator();
-            while(iterator.hasNext()){
-                Globo g = iterator.next();
-                if(g.getLetras().contains(letra) && g.onScreen){                  
-                    Platform.runLater(()->onRoot.getChildren().clear());
-                    juegoGlobos(g,letra);
-                    if (letrasObtenidas.keySet().contains(letra.toLowerCase())) {
-                        int cont= letrasObtenidas.get(letra.toLowerCase())+1;
-                        letrasObtenidas.put(letra.toLowerCase(), cont);
-                        if (g instanceof GloboMalo) {letrasObtenidas.put(letra.toLowerCase(),0);}                        
-                    }else{
-                        letrasObtenidas.put(letra.toLowerCase(), 1);
-                        if (g instanceof GloboMalo){ letrasObtenidas.put(letra.toLowerCase(),0);  }                      
-                    }
-                }
-            }});
-        return raiz;
+        return marcador;
     }
-    
 
     
     public HBox contenedorTiempo(){
