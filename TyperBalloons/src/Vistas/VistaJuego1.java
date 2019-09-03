@@ -266,6 +266,7 @@ public class VistaJuego1 {
                 l2.setFont(f);
             } catch (FileNotFoundException ex) {
                 Logger.getLogger(VistaJuego1.class.getName()).log(Level.SEVERE, null, ex);
+                Utilities.reportError(ex);
             }
             h.getChildren().addAll(l1,l2);
             h.setSpacing(60);
@@ -333,7 +334,7 @@ public class VistaJuego1 {
         globor.fijarPosicion(posicionx);
         globoslista.add(globor);
         Gpane.getChildren().addAll(globor);        
-        MoverGlobo mv = new MoverGlobo(globor,tiempo);
+        MoverGlobo mv = new MoverGlobo(globor,tiempo,tiempoJuego);
         mov= new Thread(mv);
         mov.start();    
     }
@@ -348,7 +349,7 @@ public class VistaJuego1 {
         globov.fijarPosicion(posicionx);
            
         Gpane.getChildren().addAll(globov);
-        MoverGlobo mv = new MoverGlobo(globov,tiempo);
+        MoverGlobo mv = new MoverGlobo(globov,tiempo,tiempoJuego);
         mov= new Thread(mv);
         mov.start();          
     }
@@ -363,7 +364,7 @@ public class VistaJuego1 {
         double posicionx = generarPosicionX();
         globoa.fijarPosicion(posicionx);
         Gpane.getChildren().addAll(globoa);
-        MoverGlobo mv = new MoverGlobo(globoa,tiempo);
+        MoverGlobo mv = new MoverGlobo(globoa,tiempo,tiempoJuego);
         mov= new Thread(mv);
         mov.start();   
     }
@@ -379,7 +380,7 @@ public class VistaJuego1 {
         double posicionx = generarPosicionX();
         globom.fijarPosicion(posicionx);
         Gpane.getChildren().addAll(globom);
-        MoverGlobo mv = new MoverGlobo(globom,tiempo);
+        MoverGlobo mv = new MoverGlobo(globom,tiempo,tiempoJuego);
         mov= new Thread(mv);
         mov.start();
     }
@@ -395,7 +396,8 @@ public class VistaJuego1 {
                     Thread.sleep(5000);
                 } catch (InterruptedException ex) {
                      Logger.getLogger(VistaJuego1.class.getName()).log(Level.SEVERE, null, ex);
-                    Thread.currentThread().interrupt();
+                     Utilities.reportError(ex);
+                     Thread.currentThread().interrupt();
                 }                                
             }
         }        
