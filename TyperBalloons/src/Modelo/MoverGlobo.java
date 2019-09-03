@@ -5,7 +5,7 @@
  */
 package Modelo;
 
-import Vistas.VistaJuego1;
+
 import javafx.application.Platform;
 
 /**
@@ -27,9 +27,7 @@ public class MoverGlobo implements Runnable {
     @Override
     public void run() {
         for (int i=0;i<875;i++){
-        Platform.runLater(()->{
-            globo.setLayoutY(globo.getPosicionY()-1);
-            });
+        Platform.runLater(()->globo.setLayoutY(globo.getPosicionY()-1));
                 try {
                     Thread.sleep(tiempo);
                 } catch (InterruptedException ex) {

@@ -9,7 +9,6 @@ import controlador.Controlador;
 import java.io.File;
 import utilities.CONSTANTES;
 import javafx.application.Application;
-import javafx.application.Platform;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
