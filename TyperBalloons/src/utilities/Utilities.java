@@ -30,7 +30,7 @@ import javafx.scene.control.Alert;
 public final class Utilities {
     private static MediaPlayer mp;
     private Utilities(){}
-    private static Image imgBlock=new Image(CONSTANTES.RUTA_IMGS+"BG_Block.png");
+    private static final Image imgBlock=new Image(CONSTANTES.RUTA_IMGS+"BG_Block.png");
     /**
      * Metodo que sirve para hacer una trancision entre dos roots pane en la misma escena
      * En la que aparecen muchos globos flotando hacia arriba.
