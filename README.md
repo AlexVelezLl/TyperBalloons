@@ -11,7 +11,7 @@
 
 
 # TyperBalloons
-**TyperBalloons** is a game that gives the player the oportunity of improve his speed on the keyboard in a very entreteining way, and also it helps him to train his spanish vocabulary, through all the levels that this game offers to him.
+**TyperBalloons** is a game that gives the players the oportunity of improve their speed on the keyboard in a very entreteining way, and also it helps them to train their spanish vocabulary, through all the levels that this game offers to them.
 
 ## The game
 ![TheGame](https://github.com/AlexVelezLl/TyperBalloons/blob/master/Captures/Captura4.png "TyperBallons index")
