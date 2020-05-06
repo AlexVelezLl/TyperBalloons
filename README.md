@@ -17,40 +17,46 @@
 <div align='center'><img src="./Captures/Captura4.png" alt="TyperBalloons index"/></div>
 
 The game consists in two parts:
-* In the first part the player have 60 seconds to collect as many letters as possible
+* In the first part the player has 60 seconds to collect as many letters as possible.
 
 <div align='center'>
   <img src="./Captures/Captura1.png" alt="PART1-A"/>
   <img src="./Captures/Captura2.png" alt="PART1-B"/>
 </div>
 
-* In the second part the player have 30 seconds to build as many valid spanish words as possible, usign the collected letters in part1
+* In the second part the player has 30 seconds to build as many valid spanish words as possible, usign the collected letters in part1.
 
 <div align='center'><img src="./Captures/Captura3.png" alt="PART2"/></div>
 
 ### Dark Theme
-**TyperBalloons** also have a dark theme mode for those users who love dark theme
+**TyperBalloons** also has a dark theme mode for those users who love dark theme
 <div align='center'><img alt="DARK THEME" src="./Captures/Captura5.png"/></div>
 
 ### Balloons Types
 In **TyperBalloons** There are 3 types of baloons:
-* Green Balloons: The green balloons contain inside an unique lower-case letter which you have to press to explode the balloon and collect that letter
-* Yellow Balloons: The yellow balloons contain inside an unique upper-case letter which you have to press to explode the balloon and collect that letter, we shall need to switch the caps lock to lead the game successfully
+* Green Balloons: The green balloons contain inside an unique lower-case letter which you have to press to explode the balloon and collect that letter.
+* Yellow Balloons: The yellow balloons contain inside an unique upper-case letter which you have to press to explode the balloon and collect that letter, we shall need to switch the caps lock to lead the game successfully.
 * Red Balloons: The red balloons contain inside either two or three letters inside, which you need to press all the letters inside to explode the balloon and collect those letters.
 
 #### Take care
-There are a few demon balloons 😈 which you need to avoid or you should lose all your collected letters
+There are a few demon balloons 😈 which you need to avoid or you will lose all your collected letters.
 
 <div align='center'><img alt="demon balloons" src="./Captures/Captura6.png"/></div>
 
-Since our vocabulary in the game is Spanish, you would need to change your keyboard language because it can appear letters like "ñ" to form words with that letter, and if you do not have that letter on your keyboard, you won't be able to press that letter and therefore, explode the balloon.
+### Considerations
+Since the vocabulary in the game is Spanish, you would need to change your keyboard language because it can appear letters like "ñ" in the balloons to form words with that letter, and if you do not have that letter on your keyboard, you won't be able to press that letter and therefore, explode the balloon.
+
+In spanish there are few words with "tilde" like "estás", but in **TyperBalloons** the tildes are not considered, so you can feel free of that.
 
 
 ## Prerequisites 📋
-You should have the java virtual machine installed(JVM) on your computer to run the game, if you do not have the java virtual machine you could install it from [here](https://www.java.com/es/download/)
+
+You should have the java virtual machine installed(JVM) on your computer to run the game, if you do not have the java virtual machine you could install it from [here](https://www.java.com/es/download/).
 
 ### Installation 🔧
+
 You only need to download this project.
+
 To run the game you need to get into the folder "dist", which is in the root directory, and then execute the "TyperBallons.jar" file.
 
 Or you can also run this from the shell, you need to cd to the project folder, and then execute:
