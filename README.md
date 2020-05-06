@@ -18,8 +18,11 @@
 
 The game consists in two parts:
 * In the first part the player have 60 seconds to collect as many letters as possible
-![FirstPart](./Captures/Captura1.png "PART1-A")
-![FirstPart](./Captures/Captura2.png "PART1-B")
+
+<div align='center'>
+  <img src="./Captures/Captura1.png" alt="PART1-A"/>
+  <img src="./Captures/Captura2.png" alt="PART1-B"/>
+</div>
 
 * In the second part the player have 30 seconds to build as many valid spanish words as possible, usign the collected letters in part1
 
