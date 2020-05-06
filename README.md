@@ -14,20 +14,20 @@
 **TyperBalloons** is a game that gives the players the oportunity of improve their speed on the keyboard in a very entreteining way, and also it helps them to train their spanish vocabulary, through all the levels that this game offers to them.
 
 ## The game
-![TheGame](https://github.com/AlexVelezLl/TyperBalloons/blob/master/Captures/Captura4.png "TyperBallons index")
-
+<div align='center'><img src="./Captures/Captura4.png" alt="TyperBalloons index"/></div>
 
 The game consists in two parts:
 * In the first part the player have 60 seconds to collect as many letters as possible
-![FirstPart](https://github.com/AlexVelezLl/TyperBalloons/blob/master/Captures/Captura1.png "PART1-A")
-![FirstPart](https://github.com/AlexVelezLl/TyperBalloons/blob/master/Captures/Captura2.png "PART1-B")
+![FirstPart](./Captures/Captura1.png "PART1-A")
+![FirstPart](./Captures/Captura2.png "PART1-B")
 
 * In the second part the player have 30 seconds to build as many valid spanish words as possible, usign the collected letters in part1
-![SecondPart](https://github.com/AlexVelezLl/TyperBalloons/blob/master/Captures/Captura3.png "PART2")
+
+<div align='center'><img src="./Captures/Captura3.png" alt="PART2"/></div>
 
 ### Dark Theme
 **TyperBalloons** also have a dark theme mode for those users who love dark theme
-![darkTheme](https://github.com/AlexVelezLl/TyperBalloons/blob/master/Captures/Captura5.png "DARK THEME")
+<div align='center'><img alt="DARK THEME" src="./Captures/Captura5.png"/></div>
 
 ### Balloons Types
 In **TyperBalloons** There are 3 types of baloons:
@@ -38,8 +38,7 @@ In **TyperBalloons** There are 3 types of baloons:
 #### Take care
 There are a few demon balloons 😈 which you need to avoid or you should lose all your collected letters
 
-
-![darkTheme](https://github.com/AlexVelezLl/TyperBalloons/blob/master/Captures/Captura6.png "demon balloons")
+<div align='center'><img alt="demon balloons" src="./Captures/Captura6.png"/></div>
 
 Since our vocabulary in the game is Spanish, you would need to change your keyboard language because it can appear letters like "ñ" to form words with that letter, and if you do not have that letter on your keyboard, you won't be able to press that letter and therefore, explode the balloon.
 
