@@ -9,9 +9,13 @@ import java.io.Serializable;
 
 /**
  *
- * @author CORE i7 ULTIMATE
+ * @author  AlexVelezLl
  */
 public class Score implements Comparable<Score>,Serializable{
+    /**
+     *
+     */
+    private static final long serialVersionUID = -59191999297953914L;
     private String nombre;
     private int puntaje;
     

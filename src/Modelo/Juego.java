@@ -36,10 +36,10 @@ public class Juego {
 
     
     public Juego(Dificultad f){
-        scoresF = new TreeMap(); 
+        scoresF = new TreeMap<>(); 
         game_words= cargarPalabras();
         player_score= new Score(); 
-        player_l = new HashMap();
+        player_l = new HashMap<>();
         df= f;
     }
     
@@ -47,7 +47,7 @@ public class Juego {
         return game_words;
     }
 
-    public HashMap getPlayer_l() {
+    public HashMap<String,Integer> getPlayer_l() {
         return  player_l;
     }
 

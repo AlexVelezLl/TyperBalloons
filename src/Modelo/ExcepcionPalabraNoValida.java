@@ -11,7 +11,12 @@ package Modelo;
  */
 public class ExcepcionPalabraNoValida extends RuntimeException{
     
-    public ExcepcionPalabraNoValida(){
+    /**
+     *
+     */
+    private static final long serialVersionUID = -7440434776836247585L;
+
+    public ExcepcionPalabraNoValida() {
     }
     
     public ExcepcionPalabraNoValida(String msg) {

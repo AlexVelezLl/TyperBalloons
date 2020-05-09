@@ -425,6 +425,7 @@ public class VistaInicio{
         HBox hBDif = new HBox();
         hBDif.setSpacing(18);
         try(ObjectInputStream ois = new ObjectInputStream(new FileInputStream("src/data/scores.dat"))){
+            @SuppressWarnings("unchecked")
             TreeMap<Dificultad,TreeSet<Score>> scores = (TreeMap<Dificultad,TreeSet<Score>>) ois.readObject();
             for(Entry<Dificultad,TreeSet<Score>> a : scores.entrySet()){
                 Pane pDifi = new Pane();                
@@ -434,7 +435,7 @@ public class VistaInicio{
                 ldifi.setFont(font("Arial",FontWeight.BOLD,24));
                 ldifi.setTextFill(Color.WHITE);
                 difi.getChildren().add(ldifi);
-                Set scoresDif = a.getValue();
+                Set<Score> scoresDif = a.getValue();
                 Iterator <Score> iterator = scoresDif.iterator();
                 StringBuilder scoresString = new StringBuilder();
                 
