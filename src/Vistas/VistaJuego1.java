@@ -64,7 +64,7 @@ public class VistaJuego1 {
     int numeroGlobos;
     private Random random = new Random();
     ImageView i;
-    public boolean pausa = false;
+    private boolean pausa = false;
     protected ArrayList<Globo> globoslista;
     protected HashMap<String, Integer> letrasObtenidas;
     protected Thread mov;
@@ -74,7 +74,7 @@ public class VistaJuego1 {
         juego = new Juego(f);
         letrasObtenidas = juego.getPlayer_l();
         globoslista = new ArrayList<>();
-        tiempoJuego = 60;
+        tiempoJuego = 10;
         root = crearElementos();
         iniciarJuego(f);
 
@@ -250,6 +250,7 @@ public class VistaJuego1 {
             Pane seguir = Utilities.boton("Seguir");
             seguir.setLayoutX(500);
             seguir.setLayoutY(290);
+
             seguir.setOnMouseClicked(e -> {
                 VistaJuego2 vj2 = new VistaJuego2(juego);
                 Utilities.transition(root, vj2.getRoot());
