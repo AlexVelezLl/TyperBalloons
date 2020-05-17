@@ -7,6 +7,6 @@ package Modelo;
 
 /**
  *
- * @author CORE i7 ULTIMATE
+ * @author Alex Velez
  */
 public enum Dificultad {FACIL,MEDIO,DIFICIL}

@@ -5,7 +5,6 @@
  */
 package Modelo;
 
-
 import Vistas.VistaJuego1;
 import javafx.application.Platform;
 
@@ -16,33 +15,53 @@ import javafx.application.Platform;
 public class MoverGlobo implements Runnable {
     Globo globo;
     private int tiempo;
-    public MoverGlobo(){
-        
+    private static boolean pausa;
+
+    public MoverGlobo() {
+
     }
 
-    public MoverGlobo(Globo globo, int tiempo){
-        this.globo=globo;
-        this.tiempo=tiempo;       
+    public MoverGlobo(final Globo globo, final int tiempo) {
+        this.globo = globo;
+        this.tiempo = tiempo;
     }
 
     @Override
     public void run() {
-        for (int i=0;i<875;i++){
-        Platform.runLater(()->globo.setLayoutY(globo.getPosicionY()-1));
-        if(!VistaJuego1.getActivo()){
-            Thread.currentThread().interrupt();
-        }
-                try {
-                    Thread.sleep(tiempo);
-                } catch (InterruptedException ex) {
+        int i = 0;
+        while (i < 875) {
+            if (!pausa) {
+                Platform.runLater(() -> globo.setLayoutY(globo.getPosicionY() - 1));
+                if (!VistaJuego1.getActivo()) {
                     Thread.currentThread().interrupt();
                 }
+                try {
+                    Thread.sleep(tiempo);
+                } catch (final InterruptedException ex) {
+                    Thread.currentThread().interrupt();
+                }
+                i++;
+            } else {
+                try {
+                    Thread.sleep(100);
+                } catch (final InterruptedException ex) {
+                    Thread.currentThread().interrupt();
+                }
+            }
         }
-            globo.onScreen=false;
-            
-        
-        
-        
-        
+        globo.onScreen = false;
+
+    }
+
+    public static boolean getPausa() {
+        return pausa;
+    }
+
+    public static void pausar() {
+        pausa = true;
+    }
+
+    public static void reanudar() {
+        pausa = false;
     }
 }

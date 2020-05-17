@@ -25,6 +25,7 @@ import utilities.CONSTANTES;
 import javafx.scene.layout.Pane;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCode;
 import javafx.scene.layout.StackPane;
 import java.util.Random;
 import java.util.logging.Level;
@@ -63,9 +64,11 @@ public class VistaJuego1 {
     int numeroGlobos;
     private Random random = new Random();
     ImageView i;
+    public boolean pausa = false;
     protected ArrayList<Globo> globoslista;
     protected HashMap<String, Integer> letrasObtenidas;
     protected Thread mov;
+    private Thread cuentareg;
 
     public VistaJuego1(Dificultad f) {
         juego = new Juego(f);
@@ -94,29 +97,39 @@ public class VistaJuego1 {
         } else {
             imv = new ImageView(new Image(CONSTANTES.RUTA_IMGS + "BG_04.png"));
         }
-
+        MoverGlobo.reanudar();
         HBox tiempocontenedor = contenedorTiempo();
         HBox marcador = marcadorCont();
         raiz.getChildren().addAll(new Button(), imv, tiempocontenedor, gpane, onRoot, marcador, pMessage);
         raiz.setOnKeyPressed(e -> {
-            String letra = e.getText();
-            Iterator<Globo> iterator = globoslista.iterator();
-            while (iterator.hasNext()) {
 
-                Globo g = iterator.next();
-                if (g.getLetras().contains(letra) && g.onScreen) {
-                    Platform.runLater(() -> onRoot.getChildren().clear());
-                    juegoGlobos(g, letra);
-                    if (letrasObtenidas.keySet().contains(letra.toLowerCase())) {
-                        int cont = letrasObtenidas.get(letra.toLowerCase()) + 1;
-                        letrasObtenidas.put(letra.toLowerCase(), cont);
-                        if (g instanceof GloboMalo) {
-                            letrasObtenidas.put(letra.toLowerCase(), 0);
-                        }
-                    } else {
-                        letrasObtenidas.put(letra.toLowerCase(), 1);
-                        if (g instanceof GloboMalo) {
-                            letrasObtenidas.put(letra.toLowerCase(), 0);
+            if (e.getCode() == KeyCode.ESCAPE && !pausa) {
+                pausa = true;
+                MoverGlobo.pausar();
+            } else if (e.getCode() == KeyCode.ESCAPE) {
+                pausa = false;
+                MoverGlobo.reanudar();
+            }
+            if (!pausa) {
+                String letra = e.getText();
+                Iterator<Globo> iterator = globoslista.iterator();
+                while (iterator.hasNext()) {
+
+                    Globo g = iterator.next();
+                    if (g.getLetras().contains(letra) && g.onScreen) {
+                        Platform.runLater(() -> onRoot.getChildren().clear());
+                        juegoGlobos(g, letra);
+                        if (letrasObtenidas.keySet().contains(letra.toLowerCase())) {
+                            int cont = letrasObtenidas.get(letra.toLowerCase()) + 1;
+                            letrasObtenidas.put(letra.toLowerCase(), cont);
+                            if (g instanceof GloboMalo) {
+                                letrasObtenidas.put(letra.toLowerCase(), 0);
+                            }
+                        } else {
+                            letrasObtenidas.put(letra.toLowerCase(), 1);
+                            if (g instanceof GloboMalo) {
+                                letrasObtenidas.put(letra.toLowerCase(), 0);
+                            }
                         }
                     }
                 }
@@ -224,7 +237,6 @@ public class VistaJuego1 {
      * Metodo que desactiva la accion OnKeyPressed sobre el globo y presenta los
      * resultados de la primera etapa
      */
-
     public void finalizarJuego() {
         eliminarLetrasAusentes();
         deshabilitarGlobos();
@@ -391,13 +403,23 @@ public class VistaJuego1 {
         @Override
         public void run() {
             while (tiempoJuego != 0 && activo) {
-                Platform.runLater(() -> crearGloboMalo(7));
-                try {
-                    Thread.sleep(5000);
-                } catch (InterruptedException ex) {
-                    Logger.getLogger(VistaJuego1.class.getName()).log(Level.SEVERE, null, ex);
-                    Utilities.reportError(ex);
-                    Thread.currentThread().interrupt();
+                if (!pausa) {
+                    Platform.runLater(() -> crearGloboMalo(7));
+                    try {
+                        Thread.sleep(5000);
+                    } catch (InterruptedException ex) {
+                        Logger.getLogger(VistaJuego1.class.getName()).log(Level.SEVERE, null, ex);
+                        Utilities.reportError(ex);
+                        Thread.currentThread().interrupt();
+                    }
+                } else {
+                    try {
+                        Thread.sleep(100);
+                    } catch (InterruptedException ex) {
+                        Logger.getLogger(VistaJuego1.class.getName()).log(Level.SEVERE, null, ex);
+                        Utilities.reportError(ex);
+                        Thread.currentThread().interrupt();
+                    }
                 }
             }
         }
@@ -412,15 +434,23 @@ public class VistaJuego1 {
         @Override
         public void run() {
             while (tiempoJuego != 0 && activo) {
-                Platform.runLater(() -> {
-                    crearGloboVerde(10);
-                    crearGloboAmarillo(10);
-                });
-                try {
-                    Thread.sleep(2000);
-                } catch (InterruptedException ex) {
-                    Logger.getLogger(VistaJuego1.class.getName()).log(Level.SEVERE, null, ex);
-                    Thread.currentThread().interrupt();
+                if (!pausa) {
+                    Platform.runLater(() -> {
+                        crearGloboVerde(10);
+                        crearGloboAmarillo(10);
+                    });
+                    try {
+                        Thread.sleep(2000);
+                    } catch (InterruptedException ex) {
+                        Logger.getLogger(VistaJuego1.class.getName()).log(Level.SEVERE, null, ex);
+                        Thread.currentThread().interrupt();
+                    }
+                } else {
+                    try {
+                        Thread.sleep(100);
+                    } catch (InterruptedException ex) {
+                        Thread.currentThread().interrupt();
+                    }
                 }
             }
         }
@@ -435,16 +465,24 @@ public class VistaJuego1 {
         @Override
         public void run() {
             while (tiempoJuego != 0 && activo) {
-                Platform.runLater(() -> {
-                    crearGloboRojo(9);
-                    crearGloboVerde(9);
-                    crearGloboAmarillo(9);
-                });
-                try {
-                    Thread.sleep(2000);
-                } catch (InterruptedException ex) {
-                    Logger.getLogger(VistaJuego1.class.getName()).log(Level.SEVERE, null, ex);
-                    Thread.currentThread().interrupt();
+                if (!pausa) {
+                    Platform.runLater(() -> {
+                        crearGloboRojo(9);
+                        crearGloboVerde(9);
+                        crearGloboAmarillo(9);
+                    });
+                    try {
+                        Thread.sleep(2000);
+                    } catch (InterruptedException ex) {
+                        Logger.getLogger(VistaJuego1.class.getName()).log(Level.SEVERE, null, ex);
+                        Thread.currentThread().interrupt();
+                    }
+                } else {
+                    try {
+                        Thread.sleep(100);
+                    } catch (InterruptedException ex) {
+                        Thread.currentThread().interrupt();
+                    }
                 }
             }
         }
@@ -458,17 +496,26 @@ public class VistaJuego1 {
         @Override
         public void run() {
             while (tiempoJuego != 0 && activo) {
-                Platform.runLater(() -> {
-                    crearGloboVerde(7);
-                    crearGloboAmarillo(7);
-                    crearGloboRojo(7);
-                });
-                try {
-                    Thread.sleep(2000);
-                } catch (InterruptedException ex) {
-                    Logger.getLogger(VistaJuego1.class.getName()).log(Level.SEVERE, null, ex);
-                    Thread.currentThread().interrupt();
+                if (!pausa) {
+                    Platform.runLater(() -> {
+                        crearGloboVerde(7);
+                        crearGloboAmarillo(7);
+                        crearGloboRojo(7);
+                    });
+                    try {
+                        Thread.sleep(2000);
+                    } catch (InterruptedException ex) {
+                        Logger.getLogger(VistaJuego1.class.getName()).log(Level.SEVERE, null, ex);
+                        Thread.currentThread().interrupt();
+                    }
+                } else {
+                    try {
+                        Thread.sleep(100);
+                    } catch (InterruptedException ex) {
+                        Thread.currentThread().interrupt();
+                    }
                 }
+
             }
         }
     }
@@ -483,13 +530,21 @@ public class VistaJuego1 {
         public void run() {
 
             while (tiempoJuego != 0 && activo) {
-                tiempoJuego -= 1;
-                Platform.runLater(() -> tiempo.setText(String.valueOf(tiempoJuego)));
-                try {
-                    Thread.sleep(1000);
-                } catch (InterruptedException ex) {
-                    Logger.getLogger(VistaJuego1.class.getName()).log(Level.SEVERE, null, ex);
-                    Thread.currentThread().interrupt();
+                if (!pausa) {
+                    tiempoJuego -= 1;
+                    Platform.runLater(() -> tiempo.setText(String.valueOf(tiempoJuego)));
+                    try {
+                        Thread.sleep(1000);
+                    } catch (InterruptedException ex) {
+                        Logger.getLogger(VistaJuego1.class.getName()).log(Level.SEVERE, null, ex);
+                        Thread.currentThread().interrupt();
+                    }
+                } else {
+                    try {
+                        Thread.sleep(100);
+                    } catch (InterruptedException ex) {
+                        Thread.currentThread().interrupt();
+                    }
                 }
             }
             finalizarJuego();
@@ -502,7 +557,7 @@ public class VistaJuego1 {
      * @param d Dificultad del nivel
      */
     public void iniciarJuego(Dificultad d) {
-        Thread cuentareg = new Thread(new HiloTiempo());
+        cuentareg = new Thread(new HiloTiempo());
         cuentareg.start();
         switch (d) {
             case FACIL:
