@@ -51,19 +51,18 @@ import utilities.Utilities;
  */
 
 public class VistaJuego1 {
-    Font theFont = Font.font("Aharoni", FontWeight.BOLD, 20);
-    Juego juego;
-    Pane root;
-    Pane gpane;
-    Pane onRoot;
-    Pane pMessage;
-    Label tiempo;
-    int tiempoJuego;
+    private Font theFont = Font.font("Aharoni", FontWeight.BOLD, 20);
+    private Juego juego;
+    private Pane root;
+    private Pane gpane;
+    private Pane onRoot;
+    private Pane pMessage;
+    private Label tiempo;
+    private int tiempoJuego;
     private static boolean activo = true;
-    Label globos;
-    int numeroGlobos;
+    private Label globos;
+    private int numeroGlobos;
     private Random random = new Random();
-    ImageView i;
     private boolean pausa = false;
     protected ArrayList<Globo> globoslista;
     protected HashMap<String, Integer> letrasObtenidas;
@@ -100,15 +99,23 @@ public class VistaJuego1 {
         MoverGlobo.reanudar();
         HBox tiempocontenedor = contenedorTiempo();
         HBox marcador = marcadorCont();
-        raiz.getChildren().addAll(new Button(), imv, tiempocontenedor, gpane, onRoot, marcador, pMessage);
+        Label inform = new Label("");
+        inform.setFont(CONSTANTES.FUENTE);
+        inform.setTextFill(Color.RED);
+        inform.setLayoutX(200);
+        inform.setLayoutY(70);
+        raiz.getChildren().addAll(new Button(), imv, tiempocontenedor, gpane, onRoot, marcador, pMessage,inform);
+        
         raiz.setOnKeyPressed(e -> {
 
-            if (e.getCode() == KeyCode.ESCAPE && !pausa) {
+            if (e.getCode() == KeyCode.ESCAPE && !pausa && tiempoJuego>0) {
                 pausa = true;
                 MoverGlobo.pausar();
-            } else if (e.getCode() == KeyCode.ESCAPE) {
+                inform.setText("PAUSA");
+            } else if (e.getCode() == KeyCode.ESCAPE && tiempoJuego>0) {
                 pausa = false;
                 MoverGlobo.reanudar();
+                inform.setText("");
             }
             if (!pausa) {
                 String letra = e.getText();
