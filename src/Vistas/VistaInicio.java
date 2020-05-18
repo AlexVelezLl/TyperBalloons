@@ -119,7 +119,7 @@ public class VistaInicio{
         
         Pane salir = Utilities.boton("SALIR", NAMEBUTTON);
         salir.setOnMouseClicked(e->System.exit(0));
-                  
+        
         buttons.setSpacing(20);
         buttons.getChildren().addAll(inicio,punt,salir);
         return buttons;

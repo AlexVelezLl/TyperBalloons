@@ -63,7 +63,10 @@ public class VistaJuego2 {
     private boolean terminarJuego = false;
     private final HashMap<String, Integer> game_words;
     private HashMap<String, Integer> player_l;
-
+    private boolean pausa;
+    private ScrollPane sp;
+    private Pane p2;
+    private TextField tfxd; 
     /**
      * Constructor de la vista 2 del juego
      *
@@ -116,6 +119,7 @@ public class VistaJuego2 {
      */
     private Pane elementos(Juego pd) {
         onRoot = new Pane();
+
         player_l = pd.getPlayer_l();
         // tiempo
         HBox t = new HBox();
@@ -162,21 +166,31 @@ public class VistaJuego2 {
         l2.setTextFill(Color.WHITE);
         l2.setFont(CONSTANTES.FUENTEJ);
         l2.setTextFill(Color.RED);
-        ScrollPane sp = createSP();
+        sp = createSP();
         sp.setLayoutX(40);
         sp.setLayoutY(100);
         // arreglar para el fondo jajaj
-        Pane p2 = new Pane();
-        p2.getChildren().addAll(bGView, titulo, sp, tfView, player_word, t, l1, l2, onRoot);
+        p2 = new Pane();
+        tfxd = new TextField();
+        p2.getChildren().addAll(tfxd,bGView, titulo, sp, tfView, player_word, t, l1, l2, onRoot);
         // parte der arreglando probablemente se deba metar en un pane para mejorar vbox
         // pero solo estaba probando cositas
         tfView.setLayoutX(430);
         tfView.setLayoutY(240);
         player_word.setLayoutX(440);
         player_word.setLayoutY(180);
+
+        tfxd.setOnKeyPressed(e -> {
+            if (e.getCode().equals(KeyCode.ESCAPE) && pausa) {
+                pausa = false;
+                l2.setText("");
+                player_word.setDisable(false);
+                player_word.requestFocus();
+            }
+        });
+        
         iniciarJuego(player_word, l2);
         return p2;
-
     }
 
     /**
@@ -189,9 +203,17 @@ public class VistaJuego2 {
     public void iniciarJuego(TextField player_word, Label l2) {
         Thread timer = new Thread(new HiloTiempo());
         timer.start();
+        player_word.requestFocus();
         Set<String> player_unique = new HashSet<>();
         player_word.setOnKeyPressed((e) -> {
-            if (e.getCode().equals(KeyCode.ENTER) && tiempoTranscurrido != 0) {
+            if(e.getCode().equals(KeyCode.ESCAPE)&&!pausa){
+                pausa = true;
+                l2.setText("PAUSA");
+                tfxd.requestFocus();
+                player_word.setDisable(true);
+                
+            }
+            if (e.getCode().equals(KeyCode.ENTER) && tiempoTranscurrido != 0 && !pausa) {
                 String user_word = player_word.getText().toLowerCase(); // obteniendo palabra
                 try {
                     if (disponible(user_word, player_unique)) {
@@ -256,15 +278,24 @@ public class VistaJuego2 {
         @Override
         public void run() {
             while (!terminarJuego && tiempoTranscurrido > 0) {
-                tiempoTranscurrido -= 1;
-                Platform.runLater(() -> {
-                    tiempo.setText(String.valueOf(tiempoTranscurrido));
-                });
-                try {
-                    Thread.sleep(1000);
-                } catch (InterruptedException ex) {
-                    Logger.getLogger(Utilities.class.getName()).log(Level.SEVERE, null, ex);
-                    Thread.currentThread().interrupt();
+                if (!pausa) {
+                    tiempoTranscurrido -= 1;
+                    Platform.runLater(() -> {
+                        tiempo.setText(String.valueOf(tiempoTranscurrido));
+                    });
+                    try {
+                        Thread.sleep(1000);
+                    } catch (InterruptedException ex) {
+                        Logger.getLogger(Utilities.class.getName()).log(Level.SEVERE, null, ex);
+                        Thread.currentThread().interrupt();
+                    }
+                } else {
+                    try {
+                        Thread.sleep(100);
+                    } catch (InterruptedException ex) {
+                        Logger.getLogger(Utilities.class.getName()).log(Level.SEVERE, null, ex);
+                        Thread.currentThread().interrupt();
+                    }
                 }
             }
             finalizarJuego();
@@ -323,7 +354,7 @@ public class VistaJuego2 {
      * @throws FileNotFoundException
      */
     public TreeMap<Dificultad, TreeSet<Score>> leerArchivo() throws FileNotFoundException {
-        
+
         try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(CONSTANTES.GAMEDATA + ".dat"))) {
             @SuppressWarnings("unchecked")
             TreeMap<Dificultad, TreeSet<Score>> scoresG = (TreeMap<Dificultad, TreeSet<Score>>) ois.readObject();
