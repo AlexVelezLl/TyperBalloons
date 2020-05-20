@@ -73,7 +73,7 @@ public class VistaJuego1 {
         juego = new Juego(f);
         letrasObtenidas = juego.getPlayer_l();
         globoslista = new ArrayList<>();
-        tiempoJuego = 10;
+        tiempoJuego = 60;
         root = crearElementos();
         iniciarJuego(f);
 
