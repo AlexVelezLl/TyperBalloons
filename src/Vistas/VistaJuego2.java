@@ -183,7 +183,7 @@ public class VistaJuego2 {
         tfxd.setOnKeyPressed(e -> {
             if (e.getCode().equals(KeyCode.ESCAPE) && pausa) {
                 pausa = false;
-                l2.setText("");
+                root.getChildren().remove(Controlador.getpPausa());
                 player_word.setDisable(false);
                 player_word.requestFocus();
             }
@@ -208,7 +208,7 @@ public class VistaJuego2 {
         player_word.setOnKeyPressed((e) -> {
             if(e.getCode().equals(KeyCode.ESCAPE)&&!pausa){
                 pausa = true;
-                l2.setText("PAUSA");
+                root.getChildren().add(Controlador.getpPausa());
                 tfxd.requestFocus();
                 player_word.setDisable(true);
                 

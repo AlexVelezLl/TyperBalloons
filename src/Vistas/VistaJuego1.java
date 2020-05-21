@@ -111,11 +111,11 @@ public class VistaJuego1 {
             if (e.getCode() == KeyCode.ESCAPE && !pausa && tiempoJuego>0) {
                 pausa = true;
                 MoverGlobo.pausar();
-                inform.setText("PAUSA");
+                raiz.getChildren().add(Controlador.getpPausa());
             } else if (e.getCode() == KeyCode.ESCAPE && tiempoJuego>0) {
                 pausa = false;
                 MoverGlobo.reanudar();
-                inform.setText("");
+                raiz.getChildren().remove(Controlador.getpPausa());
             }
             if (!pausa) {
                 String letra = e.getText();
