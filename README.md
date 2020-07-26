@@ -69,9 +69,9 @@ java -jar dist/TyperBalloons.jar
 * JavaFx
 * Photoshop
 
-## Autors ✒️
+## Authors ✒️
 This project would not have been possible without the collaboration of:
-* **👩‍💻 Valeria Barzola -** Developer
+* **👩‍💻 Valeria Barzola -** Developer [vbarzola](https://github.com/vbarzola)
 * **👩‍💻 Joangie Marquez -** Developer [joangiemarquez](https://github.com/joangiemarquez)
 * **👨‍💻 Alex Velez -** Developer [AlexVelezLl](https://github.com/AlexVelezLl)
 
